@@ -2,8 +2,8 @@
 
 ![](http://message360.com/wordpress/wp-content/uploads/2014/08/message360.png)
 
-### Welcome to the Message360 PHP Helper Library
-This is home to the Official PHP Message360 REST API. 
+### Welcome to the Message360 Java Helper Library
+This is home to the Official Java Message360 REST API. 
 
 ```
 Sample Code Here
