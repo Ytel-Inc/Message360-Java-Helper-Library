@@ -17,10 +17,10 @@ public class ViewNumbers {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.viewJsonNumber("9082242414");
+				String jsonSMSResponse=conn.viewJsonNumber("{phoneNumber}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<NumberMessage> viewNumber = conn.viewNumber("908224241");
+				Message360<NumberMessage> viewNumber = conn.viewNumber("{phoneNumber}");
 				if(viewNumber.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<viewNumber.getMessage360().getErrors().getError().size();x++){
 						Error error=viewNumber.getMessage360().getErrors().getError().get(x);

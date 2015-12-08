@@ -18,7 +18,7 @@ public class UpdateNumber {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			IncomingPhoneNumberRequest incomingPhoneRequest=new IncomingPhoneNumberRequest();
-			incomingPhoneRequest.setPhoneNumber("8002590284");
+			incomingPhoneRequest.setPhoneNumber("{phoneNumber}");
 			incomingPhoneRequest.setFriendlyName("FriendlyName");
 			
 			

@@ -17,11 +17,11 @@ public class AvailablePhoneNumber {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.availableJsonNumber("411", "MLG", PhoneNumberType.VOICE);
+			if(!M360Constants.JSONFORMAT){
+				String jsonSMSResponse=conn.availableJsonNumber(null, null, PhoneNumberType.VOICE);
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<NumberMessage> availablePhoneNumberMessage = conn.availableNumber("411", "MLG", PhoneNumberType.VOICE);
+				Message360<NumberMessage> availablePhoneNumberMessage = conn.availableNumber(null, null, PhoneNumberType.VOICE);
 				if(availablePhoneNumberMessage.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<availablePhoneNumberMessage.getMessage360().getErrors().getError().size();x++){
 						Error error=availablePhoneNumberMessage.getMessage360().getErrors().getError().get(x);

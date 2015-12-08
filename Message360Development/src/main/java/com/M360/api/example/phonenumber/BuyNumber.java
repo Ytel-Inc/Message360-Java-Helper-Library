@@ -16,11 +16,11 @@ public class BuyNumber {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.buyJsonNumber("8002590284");
+			if(M360Constants.JSONFORMAT){
+				String jsonSMSResponse=conn.buyJsonNumber("{phoneNumber}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<NumberMessage> listNumber = conn.buyNumber("2083660504111");
+				Message360<NumberMessage> listNumber = conn.buyNumber("{phoneNumber}");
 				if(listNumber.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<listNumber.getMessage360().getErrors().getError().size();x++){
 						Error error=listNumber.getMessage360().getErrors().getError().get(x);
