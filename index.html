@@ -48,7 +48,44 @@
 
 <p><strong>Example:</strong></p>
 
-<div class="highlight highlight-source-java"><pre>java example</pre></div>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MakeCall</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
+        <span class="pl-smi">BasicM360Configuration</span> conf <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">BasicM360Configuration</span>();
+        conf<span class="pl-k">.</span>setSid(<span class="pl-smi">M360Constants</span><span class="pl-c1"><span class="pl-k">.</span>ACCOUNTSID</span>); 
+        conf<span class="pl-k">.</span>setAuthToken(<span class="pl-smi">M360Constants</span><span class="pl-c1"><span class="pl-k">.</span>AUTHTOKEN</span>);
+        <span class="pl-smi">Message360Connector</span> conn <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Message360Connector</span>(conf);
+        <span class="pl-k">try</span> {
+            <span class="pl-smi">CallRequest</span> cr<span class="pl-k">=</span><span class="pl-k">new</span> <span class="pl-smi">CallRequest</span>();
+            cr<span class="pl-k">.</span>setFromCountryCode(<span class="pl-c1">1</span>);
+            cr<span class="pl-k">.</span>setFrom(<span class="pl-s"><span class="pl-pds">"</span>{fromNumber}<span class="pl-pds">"</span></span>);
+            cr<span class="pl-k">.</span>setTo(<span class="pl-s"><span class="pl-pds">"</span>{toNumber}<span class="pl-pds">"</span></span>);
+            cr<span class="pl-k">.</span>setToCountryCode(<span class="pl-c1">1</span>);
+            cr<span class="pl-k">.</span>setPlayDtmf(<span class="pl-s"><span class="pl-pds">"</span>{StringPlayDTMF}<span class="pl-pds">"</span></span>);
+            cr<span class="pl-k">.</span>setUrl(<span class="pl-s"><span class="pl-pds">"</span>{URL}<span class="pl-pds">"</span></span>);
+            <span class="pl-k">if</span>(<span class="pl-smi">M360Constants</span><span class="pl-c1"><span class="pl-k">.</span>JSONFORMAT</span>){
+                <span class="pl-smi">String</span> jsonCallResponse<span class="pl-k">=</span>conn<span class="pl-k">.</span>makeJsonCall(cr);
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(jsonCallResponse);
+            }<span class="pl-k">else</span>{
+                <span class="pl-k">Message360&lt;<span class="pl-smi">CallMessages</span>&gt;</span> viewCall <span class="pl-k">=</span> conn<span class="pl-k">.</span>makeCall(cr);
+                <span class="pl-k">if</span>(viewCall<span class="pl-k">.</span>getMessage360()<span class="pl-k">.</span>getErrors()<span class="pl-k">.</span>getError()<span class="pl-k">.</span>size()<span class="pl-k">!=</span><span class="pl-c1">0</span>){
+                    <span class="pl-k">for</span>(<span class="pl-k">int</span> x<span class="pl-k">=</span><span class="pl-c1">0</span>;x<span class="pl-k">&lt;</span>viewCall<span class="pl-k">.</span>getMessage360()<span class="pl-k">.</span>getErrors()<span class="pl-k">.</span>getError()<span class="pl-k">.</span>size();x<span class="pl-k">++</span>){
+                        <span class="pl-smi">Error</span> error<span class="pl-k">=</span>viewCall<span class="pl-k">.</span>getMessage360()<span class="pl-k">.</span>getErrors()<span class="pl-k">.</span>getError()<span class="pl-k">.</span>get(x);
+                            <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>code :=<span class="pl-pds">"</span></span><span class="pl-k">+</span>error<span class="pl-k">.</span>getCode()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>.<span class="pl-cce">\n</span>Message:=<span class="pl-pds">"</span></span><span class="pl-k">+</span>error<span class="pl-k">.</span>getMessage());
+                    }
+                }<span class="pl-k">else</span>{
+                    <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>Make Call<span class="pl-pds">"</span></span>);
+                    <span class="pl-k">int</span> size<span class="pl-k">=</span>viewCall<span class="pl-k">.</span>getMessage360()<span class="pl-k">.</span>getCall()<span class="pl-k">.</span>size();
+                    <span class="pl-k">for</span>(<span class="pl-smi">Call</span> curCall<span class="pl-k">:</span>viewCall<span class="pl-k">.</span>getMessage360()<span class="pl-k">.</span>getCall()){
+                        <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(curCall<span class="pl-k">.</span>getCallSid()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span><span class="pl-k">+</span>curCall<span class="pl-k">.</span>getDirection());
+                    }
+                }
+
+            }
+        } <span class="pl-k">catch</span> (<span class="pl-smi">M360Exception</span> e) {
+            e<span class="pl-k">.</span>printStackTrace();
+        }
+    }
+</pre></div>
 
 <p>An account for Message360 is free to sign up for at <a href="https://api.message360.com">https://api.message360.com</a></p>
 
