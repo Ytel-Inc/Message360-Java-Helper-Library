@@ -21,8 +21,8 @@ import com.M360.api.exception.M360Exception;
 public class ViewNumberOptin {
 	public static void main(String[] args) {
 		BasicM360Configuration conf = new BasicM360Configuration();
-		conf.setSid("YT10ff38384fba9905c49ccaa487c3367f");
-		conf.setAuthToken("1acff5853c8f26d269b259b79db3ebb1");
+		conf.setSid(M360Constants.ACCOUNTSID); 
+		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
