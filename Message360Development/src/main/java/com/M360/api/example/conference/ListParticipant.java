@@ -1,3 +1,13 @@
+/**
+ * 
+ * The request response returned here contains a list of all conferences associated with an account.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.example.conference;
 
 
@@ -18,10 +28,10 @@ public class ListParticipant {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String listJsonResponse=conn.listJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d");
+				String listJsonResponse=conn.listJsonParticipant("{ConferenceSid}");
 				System.out.println(listJsonResponse);
 			}else{
-				Message360<ConferenceMessages> viewParticipant= conn.listParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d");
+				Message360<ConferenceMessages> viewParticipant= conn.listParticipant("{ConferenceSid}");
 				if(viewParticipant.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<viewParticipant.getMessage360().getErrors().getError().size();x++){
 						Error error=viewParticipant.getMessage360().getErrors().getError().get(x);

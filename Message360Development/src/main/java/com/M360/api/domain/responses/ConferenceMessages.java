@@ -1,3 +1,13 @@
+/**
+ * 
+ * Message360 Conference Response Structure.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.domain.responses;
 
 import org.codehaus.jackson.annotate.JsonProperty;

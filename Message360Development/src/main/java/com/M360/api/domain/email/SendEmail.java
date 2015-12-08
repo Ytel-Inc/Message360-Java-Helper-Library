@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Send Email Address POJO implementation of "EMAIL" Module.
+ * @see SendEmail
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.email;
 
 import java.util.Date;

@@ -1,3 +1,11 @@
+/**
+ * The response returned here contains all resource properties associated with the given RecordingSid.
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
+
 package com.M360.api.example.recording;
 
 
@@ -19,10 +27,10 @@ public class ViewRecording {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 				if(!M360Constants.JSONFORMAT){
-					String viewRecordingResponse=conn.viewJsonRecording("32114fb6-1b1c-4b8a-cbfd-46f977cfc6ce");
+					String viewRecordingResponse=conn.viewJsonRecording("{RecordingId}");
 					System.out.println(viewRecordingResponse);
 				}else{
-					Message360<RecordMessage> viewRecording= conn.viewRecording("c5eda6ae-ddf9-4fe2-cff8-07b83a1c1c4a");
+					Message360<RecordMessage> viewRecording= conn.viewRecording("{RecordingId}");
 					if(viewRecording.getMessage360().getErrors().getError().size()!=0){
 						for(int x=0;x<viewRecording.getMessage360().getErrors().getError().size();x++){
 							Error error=viewRecording.getMessage360().getErrors().getError().get(x);

@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 /**
- * A TelapiConfiguration implementation which loads the configuration from a file.
+ * A M360Configuration implementation which loads the configuration from a file.
  * @see M360Configuration
  *
  */
@@ -17,14 +17,14 @@ public class PropertiesFileM360Configuration extends Properties implements M360C
 	Logger logger = Logger.getLogger(PropertiesFileM360Configuration.class);
 	
 	/**
-	 * Creates a TelapiConfiguration from a file called "message360.properties" which must be on the classpath.
+	 * Creates a M360Configuration from a file called "message360.properties" which must be on the classpath.
 	 */
 	public PropertiesFileM360Configuration() {
 		this("message360.properties");
 	}
 	
 	/**
-	 * Creates a TelapiConfiguration from a file which must be on the classpath.
+	 * Creates a M360Configuration from a file which must be on the classpath.
 	 * @param propFileName The fileName of the properties file.
 	 */
 	public PropertiesFileM360Configuration(String propFileName) {
@@ -32,20 +32,20 @@ public class PropertiesFileM360Configuration extends Properties implements M360C
 		try {
 			load(url.openStream());
 		} catch (IOException e) {
-			logger.error("Cannot load or find Telapi properties file on classpath: "
+			logger.error("Cannot load or find M360 properties file on classpath: "
 					+ propFileName, e);
 		}
 	}
 	
 	/**
-	 * Creates a TelapiConfiguration by loading properties from the provided FileInputStream.
+	 * Creates a M360Configuration by loading properties from the provided FileInputStream.
 	 * @param is The FileInputStream from which to load the configuration.
 	 */
 	public PropertiesFileM360Configuration(FileInputStream is) {
 		try {
 			load(is);
 		} catch (IOException e) {
-			logger.error("Cannot load the specified Telapi properties file.");
+			logger.error("Cannot load the specified M360 properties file.");
 		}
 	}
 

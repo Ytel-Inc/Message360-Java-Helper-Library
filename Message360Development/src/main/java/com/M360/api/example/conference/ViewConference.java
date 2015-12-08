@@ -1,3 +1,13 @@
+/**
+ * 
+ * The request response returned here contains all resource properties associated with the conference name.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.example.conference;
 
 import com.M360.api.Message360Connector;
@@ -17,10 +27,10 @@ public class ViewConference {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 				if(M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.viewJsonConference("CF7eba209c-9aaf-42c6-805a-3c3eb623138d");
+					String listJsonResponse=conn.viewJsonConference("{conferenceSid}");
 					System.out.println(listJsonResponse);
 				}else{
-					Message360<ConferenceMessages> viewConference= conn.viewConference("CF7eba209c-9aaf-42c6-805a-3c3eb623138d");
+					Message360<ConferenceMessages> viewConference= conn.viewConference("{ConferenceSid}");
 					if(viewConference.getMessage360().getErrors().getError().size()!=0){
 						for(int x=0;x<viewConference.getMessage360().getErrors().getError().size();x++){
 							Error error=viewConference.getMessage360().getErrors().getError().get(x);

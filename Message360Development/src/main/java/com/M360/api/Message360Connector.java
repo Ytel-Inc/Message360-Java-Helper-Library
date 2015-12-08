@@ -648,9 +648,16 @@ public class Message360Connector {
 	public Message360<CallMessages> voiceEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo);
 	}
+	public Message360<CallMessages> voiceEffects(String callSid)throws M360Exception{
+		return voiceEffects(conf.getSid(),callSid, null, null, null, null, null, null);
+	}
+	
 	
 	public String voiceJsonEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return callProxy.voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo).getEntity(String.class);
+	}
+	public String voiceJsonEffects(String callSid)throws M360Exception{
+		return voiceJsonEffects(callSid, null, null, null, null, null, null);
 	}
 	
 	/**

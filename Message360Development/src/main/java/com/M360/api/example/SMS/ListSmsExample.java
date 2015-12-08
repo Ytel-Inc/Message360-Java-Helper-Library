@@ -25,7 +25,7 @@ public class ListSmsExample {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
+			if(M360Constants.JSONFORMAT){
 				String jsonSMSResponse=conn.listJsonSmsMessages();
 				System.out.println(jsonSMSResponse);
 			}else{
@@ -37,8 +37,7 @@ public class ListSmsExample {
 					}
 				}else{
 					System.out.println("List SMS.");
-					for(int x=0;x<listSMSMessages.getMessage360().getMsgCount();x++){
-						Message curMessage=listSMSMessages.getMessage360().getMessages().getMessage().get(x);
+					for(Message curMessage:listSMSMessages.getMessage360().getMessages().getMessage()){
 						System.out.println("sid"+curMessage.getSid()+",status:="+curMessage.getStatus());
 					}
 				}	

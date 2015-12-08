@@ -14,13 +14,14 @@ import com.M360.api.configuration.M360Constants;
 import com.M360.api.domain.Message360;
 import com.M360.api.domain.responses.SMSMessages;
 import com.M360.api.domain.SMS.Message;
+import com.M360.api.exception.Error;
 import com.M360.api.exception.M360Exception;
 
 public class ListInBoundSms {
 	public static void main(String[] args) {
 		BasicM360Configuration conf = new BasicM360Configuration();
-		conf.setSid("YT10ff38384fba9905c49ccaa487c3367f");
-		conf.setAuthToken("1acff5853c8f26d269b259b79db3ebb1");
+		conf.setSid(M360Constants.ACCOUNTSID); 
+		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
@@ -28,9 +29,18 @@ public class ListInBoundSms {
 				System.out.println(jsonSMSResponse);
 			}else{
 				Message360<SMSMessages> inBoundSMSList = conn.getInboundSMS();
-				for(Message inboundSMS : inBoundSMSList.getMessage360().getMessages().getMessage()) {
-					System.out.println(inboundSMS.getSid()+",from :="+inboundSMS.getFrom()+",To :="+inboundSMS.getTo());
+				if(inBoundSMSList.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<inBoundSMSList.getMessage360().getErrors().getError().size();x++){
+						Error error=inBoundSMSList.getMessage360().getErrors().getError().get(x);
+							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage());
+					}
+				}else{
+					System.out.println("List of InBoundSms");
+					for(Message inboundSMS : inBoundSMSList.getMessage360().getMessages().getMessage()) {
+						System.out.println(inboundSMS.getSid()+",from :="+inboundSMS.getFrom()+",To :="+inboundSMS.getTo());
+					}
 				}
+				
 			}
 		} catch (M360Exception e) {
 			e.printStackTrace();

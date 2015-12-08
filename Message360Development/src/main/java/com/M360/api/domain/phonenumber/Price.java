@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Phone POJO implementation of "PhoneNumber" Module.
+ * @see Price
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.phonenumber;
 
 import org.codehaus.jackson.annotate.JsonProperty;

@@ -1,3 +1,10 @@
+/**
+ * Here you can experiment with transcribing recordings that have occurred through your message360 account and view the request response generated when doing so.
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
 package com.M360.api.example.transcription;
 
 import com.M360.api.Message360Connector;
@@ -17,10 +24,10 @@ public class RecordingTranscription {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.recordingJsonTranscription("3e503cdf-5602-4bd3-cbe2-e13372c28e42");
+				String jsonSMSResponse=conn.recordingJsonTranscription("{RecordingSid}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<TranscriptionMessage> audioUrlTrans = conn.recordingTranscription("19ca9ccf-d3a4-40d9-c0ed-1095dc5ffe91123");
+				Message360<TranscriptionMessage> audioUrlTrans = conn.recordingTranscription("{RecordingSid}");
 				if(audioUrlTrans.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<audioUrlTrans.getMessage360().getErrors().getError().size();x++){
 						Error error=audioUrlTrans.getMessage360().getErrors().getError().get(x);

@@ -1,5 +1,5 @@
 /**
- * Provides a basic POJO-like implementation of TelapiConfiguration.
+ * Provides a basic POJO-like implementation of M360Configuration.
  * @see M360Configuration
  * @version v1b
  * @author Ytel-Inc

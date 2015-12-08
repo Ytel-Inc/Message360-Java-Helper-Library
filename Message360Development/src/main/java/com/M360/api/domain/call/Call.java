@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Call POJO implementation of "CALL" Module.
+ * @see Call
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.call;
 
 import java.util.Date;

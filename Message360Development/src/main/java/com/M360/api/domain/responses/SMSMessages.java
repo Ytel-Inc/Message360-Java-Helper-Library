@@ -1,3 +1,13 @@
+/**
+ * 
+ * Message360 SMS Response Structure.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.domain.responses;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -9,6 +19,7 @@ import com.M360.api.exception.Message360Exception;
 
 
 public class SMSMessages extends Message360Exception{
+	
 	@JsonProperty(value = "ResponseStatus")
 	private Integer responseStatus =null;
 	@JsonProperty(value = "MessageCount")

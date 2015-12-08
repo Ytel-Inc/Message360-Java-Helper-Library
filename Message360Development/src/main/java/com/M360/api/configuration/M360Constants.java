@@ -1,3 +1,11 @@
+/**
+ * 
+ * The class used for static values for connecting M360 REST API.
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
 package com.M360.api.configuration;
 
 import java.text.SimpleDateFormat;
@@ -9,8 +17,8 @@ public class M360Constants {
 	public static final String API_VERSION = "api/v1b";	
 	
 	// use credential
-	public static final String ACCOUNTSID="{ACCOUNTSID}";//
-	public static final String AUTHTOKEN="{AUTHTOKEN}";//
+	public static final String ACCOUNTSID="{ACCOUNTSID}";
+	public static final String AUTHTOKEN="{AUTHTOKEN}";
 		
 	public static final boolean JSONFORMAT=true;
 	

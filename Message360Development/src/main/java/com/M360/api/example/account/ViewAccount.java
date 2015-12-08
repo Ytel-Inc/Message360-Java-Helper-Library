@@ -27,11 +27,11 @@ public class ViewAccount {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String accountResponse=conn.viewJsonAccount();//
+			if(M360Constants.JSONFORMAT){
+				String accountResponse=conn.viewJsonAccount();
 				System.out.println(accountResponse);
 			}else{
-				Message360<AccountMessage> accountExample = conn.viewAccount();//0, 0, 0);
+				Message360<AccountMessage> accountExample = conn.viewAccount();
 				if(accountExample.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<accountExample.getMessage360().getErrors().getError().size();x++){
 						Error error=accountExample.getMessage360().getErrors().getError().get(x);

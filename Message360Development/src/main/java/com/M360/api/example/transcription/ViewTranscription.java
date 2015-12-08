@@ -1,3 +1,10 @@
+/**
+ * The response returned here contains all resource properties associated with the given TranscriptionSid.
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
 package com.M360.api.example.transcription;
 
 
@@ -18,19 +25,19 @@ public class ViewTranscription {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.viewJsonTranscription("TRrDPNECHAcdobq95yT2X3mU92SNRmQfsV");
-				System.out.println(jsonSMSResponse);
+				String jsonTranscriptionResponse=conn.viewJsonTranscription("{TrascribedSid}");
+				System.out.println(jsonTranscriptionResponse);
 			}else{
-				Message360<TranscriptionMessage> sendSMS = conn.viewTranscription("TRrDPNECHAcdobq95yT2X3mU92SNRmQfsV");
-				if(sendSMS.getMessage360().getErrors().getError().size()!=0){
-					for(int x=0;x<sendSMS.getMessage360().getErrors().getError().size();x++){
-						Error error=sendSMS.getMessage360().getErrors().getError().get(x);
+				Message360<TranscriptionMessage> viewTranscription = conn.viewTranscription("{TrascribedSid}");
+				if(viewTranscription.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<viewTranscription.getMessage360().getErrors().getError().size();x++){
+						Error error=viewTranscription.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
 					}
 				}else{
-					for(int x=0;x<sendSMS.getMessage360().getTranscription().size();x++){
-						Transcription curMessage=sendSMS.getMessage360().getTranscription().get(x);
-						System.out.println(x+") sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
+					System.out.println("View Transcription");
+					for(Transcription curMessage:viewTranscription.getMessage360().getTranscription()){
+						System.out.println("sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
 					}
 				}
 			}

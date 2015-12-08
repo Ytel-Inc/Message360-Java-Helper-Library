@@ -19,15 +19,15 @@ public class ViewSmsExample {
 
 	public static void main(String[] args) {
 		BasicM360Configuration conf = new BasicM360Configuration();
-		conf.setSid(M360Constants.ACCOUNTSID1); 
+		conf.setSid(M360Constants.ACCOUNTSID); 
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.viewJsonSmsMessage("SMb2f14926-302f-1367-82c4-e2712b7506691111");
+				String jsonSMSResponse=conn.viewJsonSmsMessage("{SMSMEssagesSid}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<SMSMessages> viewSMS = conn.viewSmsMessage("SMb2f14926-302f-1367-82c4-e2712b750669");
+				Message360<SMSMessages> viewSMS = conn.viewSmsMessage("{SMSMEssagesSid}");
 				if(viewSMS.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<viewSMS.getMessage360().getErrors().getError().size();x++){
 						Error error=viewSMS.getMessage360().getErrors().getError().get(x);

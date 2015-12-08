@@ -25,10 +25,10 @@ public class AddUnsubscribeEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.addJsonUnsubsribeEmailAddress("hi@3.com");
+				String jsonEmailResponse=conn.addJsonUnsubsribeEmailAddress("{EmailAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Unsubscribed>> addUnsubscribed = conn.addUnsubsribeEmailAddress("hi@4.com");
+				Message360<Message360Email<Unsubscribed>> addUnsubscribed = conn.addUnsubsribeEmailAddress("{EmailAddress}");
 				if(addUnsubscribed.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<addUnsubscribed.getMessage360().getErrors().getError().size();x++){
 						Error error=addUnsubscribed.getMessage360().getErrors().getError().get(x);

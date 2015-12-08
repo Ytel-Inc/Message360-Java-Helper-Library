@@ -1,3 +1,10 @@
+/**
+ * Provides a basic Account POJO implementation of Account Module.
+ * @see Account
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
 package com.M360.api.domain.account;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -5,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.M360.api.domain.BaseMessage360Object;
 
 public class Account extends BaseMessage360Object{
+	
 	@JsonProperty(value="AccountBalance")
 	private String accountBalance =null;
 	@JsonProperty(value="InboundCalls")

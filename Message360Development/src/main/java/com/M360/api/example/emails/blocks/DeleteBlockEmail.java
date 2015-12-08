@@ -27,7 +27,7 @@ public class DeleteBlockEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("rizwan@xoyal.com");
+				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("{EmailAddress}");
 				System.out.println(deleteJsonBlockEmailAddr);
 			}else{
 				Message360<Message360Email<Blocked>> deleteBlocEmailAddr = conn.deleteBlocksEmailAdress("salaman@srk.com");

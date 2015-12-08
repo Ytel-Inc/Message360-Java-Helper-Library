@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Usage POJO implementation of "Usage" Module.
+ * @see Blocked
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.usage;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -5,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.M360.api.domain.BaseMessage360Object;
 
 public class Usage extends BaseMessage360Object{
+	
 	@JsonProperty(value="Product")
 	private String product=null;
 	@JsonProperty(value="TotalCost")

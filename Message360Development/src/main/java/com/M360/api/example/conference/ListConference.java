@@ -1,3 +1,14 @@
+/**
+ * 
+ * The request response returned here contains a list of all conferences associated with an account.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
+
 package com.M360.api.example.conference;
 
 import com.M360.api.Message360Connector;
@@ -8,8 +19,6 @@ import com.M360.api.domain.conference.Conference;
 import com.M360.api.domain.responses.ConferenceMessages;
 import com.M360.api.exception.Error;
 import com.M360.api.exception.M360Exception;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class ListConference {
 	public static  void main(String[] args) throws Exception{
@@ -20,10 +29,7 @@ public class ListConference {
 		try {
 				if(M360Constants.JSONFORMAT){
 					String listJsonResponse=conn.listJsonConference();
-					System.out.println("Json Object");
-					JsonParser parser = new JsonParser();
-					JsonObject o = parser.parse(listJsonResponse).getAsJsonObject();
-					System.out.println(o);
+					System.out.println(listJsonResponse);
 				}else{
 					Message360<ConferenceMessages> listConference= conn.listConference();
 					if(listConference.getMessage360().getErrors().getError().size()!=0){

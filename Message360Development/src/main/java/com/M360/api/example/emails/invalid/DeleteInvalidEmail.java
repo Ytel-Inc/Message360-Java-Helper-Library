@@ -26,7 +26,7 @@ public class DeleteInvalidEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonInvalidEmail("abc@2.com");
+				String jsonEmailResponse=conn.deleteJsonInvalidEmail("{EmailAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
 				Message360<Message360Email<Invalid>> deletedInvalidEmails = conn.deleteInValidEmail("sdfs@1.com");

@@ -1,3 +1,10 @@
+/**
+ * Provides a basic Optins Email Address POJO implementation of "EMAIL" Module.
+ * @see Optin
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
 package com.M360.api.domain.SMS;
 
 import org.codehaus.jackson.annotate.JsonProperty;

@@ -1,3 +1,13 @@
+/**
+ * 
+ * Here you can experiment with initiating a call through Message360 and view the request response generated when doing so.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.example.call;
 
 import com.M360.api.Message360Connector;
@@ -19,13 +29,11 @@ public class MakeCall {
 		try {
 			CallRequest cr=new CallRequest();
 			cr.setFromCountryCode(1);
-			//cr.setFrom("7013358578");//and 949-201-1148
-			cr.setFrom("9495292655");
-			//cr.setTo("9492294192");//polycom
-			cr.setTo("9492080471");//mobile
+			cr.setFrom("{fromNumber}");
+			cr.setTo("{toNumber}");
 			cr.setToCountryCode(1);
-			cr.setPlayDtmf("abc123098=");
-			cr.setUrl("http://devweb.ytel.com/ytelapi/YTELAPI-10.php");
+			cr.setPlayDtmf("{StringPlayDTMF}");
+			cr.setUrl("{URL}");
 			if(M360Constants.JSONFORMAT){
 				String jsonCallResponse=conn.makeJsonCall(cr);
 				System.out.println(jsonCallResponse);
@@ -39,8 +47,7 @@ public class MakeCall {
 				}else{
 					System.out.println("Make Call");
 					int size=viewCall.getMessage360().getCall().size();
-					for(int x=0;x<size;x++){
-						Call curCall=viewCall.getMessage360().getCall().get(x);
+					for(Call curCall:viewCall.getMessage360().getCall()){
 						System.out.println(curCall.getCallSid()+","+curCall.getDirection());
 					}
 				}

@@ -1,3 +1,12 @@
+/**
+ * Provides a basic Phone POJO implementation of "PhoneNumber" Module.
+ * @see Phone
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
+
 package com.M360.api.domain.phonenumber;
 
 import java.util.Date;
@@ -9,6 +18,7 @@ import com.M360.api.domain.BaseMessage360Object;
 import com.M360.api.json.JsonDateParser;
 
 public class Phone extends BaseMessage360Object{
+	
 	@JsonProperty(value="PhoneNumber")
 	private String phoneNumber = null;
 	@JsonProperty(value="FriendlyName")

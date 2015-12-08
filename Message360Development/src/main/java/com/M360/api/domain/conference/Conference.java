@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Conference POJO implementation of "CONFERENCE" Module.
+ * @see Conference
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.conference;
 
 import java.util.Date;
@@ -10,6 +18,7 @@ import com.M360.api.domain.BaseMessage360Object;
 import com.M360.api.json.JsonDateParser;
 
 public class Conference extends BaseMessage360Object{
+	
 	@JsonProperty(value="ConferenceSid")
 	private String conferenceSid = null;
 	@JsonProperty(value="FriendlyName")

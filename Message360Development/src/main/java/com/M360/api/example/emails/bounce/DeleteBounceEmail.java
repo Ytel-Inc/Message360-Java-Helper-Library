@@ -25,10 +25,10 @@ public class DeleteBounceEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonBounceEmail("xyz@xyz.com");
+				String jsonEmailResponse=conn.deleteJsonBounceEmail("{EmailAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Bounce>> deleteBounceEmail = conn.deleteBounceEmail("xyztestaaa");
+				Message360<Message360Email<Bounce>> deleteBounceEmail = conn.deleteBounceEmail("{EmailAddress}");
 				if(deleteBounceEmail.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteBounceEmail.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteBounceEmail.getMessage360().getErrors().getError().get(x);

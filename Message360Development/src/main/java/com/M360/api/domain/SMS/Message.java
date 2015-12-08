@@ -1,3 +1,11 @@
+/**
+ * Provides a basic Message Email POJO implementation of "SMS" Module.
+ * @see Message
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
+
 package com.M360.api.domain.SMS;
 
 import java.util.Date;

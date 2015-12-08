@@ -1,3 +1,11 @@
+/**
+ * Here you can experiment with transcribing audio located at a URL and view the request response generated when doing so
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
+
 package com.M360.api.example.transcription;
 
 import com.M360.api.Message360Connector;
@@ -17,10 +25,10 @@ public class AudioUrlTranscription {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.audioUrlJsonTranscription("https://storage.googleapis.com/m360-102504/2015-12-01/1448970946_9492080471123.mp3");
+				String jsonSMSResponse=conn.audioUrlJsonTranscription("{Audio_MP3_OR_WAVE_Url}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<TranscriptionMessage> audioUrlTrans = conn.audioUrlTranscription("https://storage.googleapis.com/m360-102504/2015-12-01/1448970946_9492080471.mp3");
+				Message360<TranscriptionMessage> audioUrlTrans = conn.audioUrlTranscription("{Audio_MP3_OR_WAVE_Url}");
 				if(audioUrlTrans.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<audioUrlTrans.getMessage360().getErrors().getError().size();x++){
 						Error error=audioUrlTrans.getMessage360().getErrors().getError().get(x);

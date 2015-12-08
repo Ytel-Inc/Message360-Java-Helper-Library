@@ -1,3 +1,10 @@
+/**
+ * The request response returned here contains a list of transcriptions that have occurred through your message360 account.
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
 package com.M360.api.example.transcription;
 
 import com.M360.api.Message360Connector;

@@ -1,3 +1,13 @@
+/**
+ * 
+ * Here you can experiment with playing audio to conference participants.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.example.conference;
 
 import com.M360.api.Message360Connector;
@@ -17,10 +27,10 @@ public class AddParticipant {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 				if(!M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.addJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "8983183436", false, false, 1);
+					String listJsonResponse=conn.addJsonParticipant("{ConferenceSid}", "{ParticipantNumber}", false, false, 1);
 					System.out.println(listJsonResponse);
 				}else{
-					Message360<ConferenceMessages> addParticipant= conn.addParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "8983183436", false, false, 1);
+					Message360<ConferenceMessages> addParticipant= conn.addParticipant("{ConferenceSid}", "{ParticipantNumber}", false, false, 1);
 					if(addParticipant.getMessage360().getErrors().getError().size()!=0){
 						for(int x=0;x<addParticipant.getMessage360().getErrors().getError().size();x++){
 							Error error=addParticipant.getMessage360().getErrors().getError().get(x);

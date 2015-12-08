@@ -1,3 +1,10 @@
+/**
+ * Provides a basic Recording POJO implementation of "Recording" Module.
+ * @see Recording
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ */
 package com.M360.api.domain.recording;
 
 import java.util.Date;
@@ -9,6 +16,7 @@ import com.M360.api.domain.BaseMessage360Object;
 import com.M360.api.json.JsonDateParser;
 
 public class Recording extends BaseMessage360Object{
+	
 	@JsonProperty(value="RecordingSid")
 	private String recordingSid=null;
 	@JsonProperty(value="AccountSid")

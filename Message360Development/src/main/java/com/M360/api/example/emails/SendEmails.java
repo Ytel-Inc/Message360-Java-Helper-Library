@@ -27,10 +27,10 @@ public class SendEmails {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.sendJsonEmail("rizwanxoyal.com,nitinxoyal.com", "subject", "Send Mail From Json Development Java Library.!");
+				String jsonEmailResponse=conn.sendJsonEmail("{MultipleEmailAddressseperated by comma}", "subject", "Send Mail From Json Development Java Library.!");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<SendEmail>> smsMessage = conn.sendEmail("rizwanxoyal.com,nitinxoyal.com", "subject", "Send Mail From Development Java Library.!");
+				Message360<Message360Email<SendEmail>> smsMessage = conn.sendEmail("{MultipleEmailAddressseperated by comma}", "subject", "Send Mail From Development Java Library.!");
 				if(smsMessage.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<smsMessage.getMessage360().getErrors().getError().size();x++){
 						Error error=smsMessage.getMessage360().getErrors().getError().get(x);

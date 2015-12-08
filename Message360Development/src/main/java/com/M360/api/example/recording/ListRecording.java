@@ -1,3 +1,10 @@
+/**
+ * The request response returned here contains a list of all recordings that have occurred through your Message360 account.
+ * @version v1b
+ * @since 2015-11-12 12:12:13
+ * @author Ytel Inc
+ * 
+ */
 package com.M360.api.example.recording;
 
 import com.M360.api.Message360Connector;

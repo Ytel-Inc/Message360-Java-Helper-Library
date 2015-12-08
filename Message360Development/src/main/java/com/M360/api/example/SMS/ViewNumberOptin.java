@@ -26,10 +26,10 @@ public class ViewNumberOptin {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.getJsonNumberOptins("9492080471", "8003824913", 1, 1, 0, "Nitin", "Nitin Added");
+				String jsonSMSResponse=conn.getJsonNumberOptins("toNumber", "fromNumber", 1, 1, 0, "{authorizedby}", "{authorizedhow}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<SMSMessages> viewOptInsSMS = conn.getNumberOptins("94920804711", "80038249131", 1, 1, 0, "Nitin", "Nitin Added");
+				Message360<SMSMessages> viewOptInsSMS = conn.getNumberOptins("toNumber", "fromNumber", 1, 1, 0, "{authorizedby}", "{authorizedhow}");
 				if(viewOptInsSMS.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<viewOptInsSMS.getMessage360().getErrors().getError().size();x++){
 						Error error=viewOptInsSMS.getMessage360().getErrors().getError().get(x);

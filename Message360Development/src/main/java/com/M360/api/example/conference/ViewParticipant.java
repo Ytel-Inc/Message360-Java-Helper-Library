@@ -1,4 +1,15 @@
+/**
+ * 
+ * The request response returned here contains a conference participant resource.
+ * 
+ * @version v1b
+ * @author Ytel-Inc
+ * @date November 2015
+ * 
+ */
+
 package com.M360.api.example.conference;
+
 
 import com.M360.api.Message360Connector;
 import com.M360.api.configuration.BasicM360Configuration;
@@ -17,10 +28,10 @@ public class ViewParticipant {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 				if(M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.viewJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d51");
+					String listJsonResponse=conn.viewJsonParticipant("{ConferenceSid}", "{ParticipantSid}");
 					System.out.println(listJsonResponse);
 				}else{
-					Message360<ConferenceMessages> viewParticipant= conn.viewParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5");
+					Message360<ConferenceMessages> viewParticipant= conn.viewParticipant("{ConferenceSid}", "{ParticipantSid}");
 					if(viewParticipant.getMessage360().getErrors().getError().size()!=0){
 						for(int x=0;x<viewParticipant.getMessage360().getErrors().getError().size();x++){
 							Error error=viewParticipant.getMessage360().getErrors().getError().get(x);
