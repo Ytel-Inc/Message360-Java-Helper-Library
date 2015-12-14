@@ -38,7 +38,6 @@ import com.M360.api.domain.email.Unsubscribed;
 import com.M360.api.domain.enums.AudioDirection;
 import com.M360.api.domain.enums.AudioFormat;
 import com.M360.api.domain.enums.CallInterruptStatus;
-import com.M360.api.domain.enums.CallStatus;
 import com.M360.api.domain.enums.ConferenceStatus;
 import com.M360.api.domain.enums.Direction;
 import com.M360.api.domain.enums.HttpMethod;
@@ -271,18 +270,18 @@ public class Message360Connector {
 	* @throws M360Exception
 	*/
 	public Message360<SMSMessages> sendSmsMessage(String accountSid, String to, String from,
-		String body,String method, Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
+		String body,HttpMethod method, Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
 	ClientResponse<Message360<SMSMessages>> smsMessage = smsProxy.sendSmsMessage(
 			accountSid, to, from, body,method,fromCountryCode,toCountryCode, statusCallback);
 	return returnThrows(smsMessage);
 	}
 	
-	public Message360<SMSMessages> sendSmsMessage(String to, String from, String body,String method,Integer fromCountryCode,Integer toCountryCode,
+	public Message360<SMSMessages> sendSmsMessage(String to, String from, String body,HttpMethod method,Integer fromCountryCode,Integer toCountryCode,
 		String statusCallback) throws M360Exception {
 	return sendSmsMessage(conf.getSid(), to, from, body,method,fromCountryCode,toCountryCode, statusCallback);
 	}
 	
-	public String  sendJsonSmsMessage(String to, String from, String body,String method,Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
+	public String  sendJsonSmsMessage(String to, String from, String body,HttpMethod method,Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
 		return smsProxy.sendSmsMessage(conf.getSid(), to, from, body,method,fromCountryCode,toCountryCode, statusCallback).getEntity(String.class);
 	}
 	
@@ -650,9 +649,15 @@ public class Message360Connector {
 	public Message360<CallMessages> voiceEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo);
 	}
+	public Message360<CallMessages> voiceEffects(String callSid) throws M360Exception{
+		return voiceEffects(conf.getSid(),null, null, null, null, null, null, null);
+	}
 	
 	public String voiceJsonEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return callProxy.voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo).getEntity(String.class);
+	}
+	public String voiceJsonEffects(String callSid) throws M360Exception{
+		return callProxy.voiceEffects(conf.getSid(),callSid, null, null, null, null, null, null).getEntity(String.class);
 	}
 	
 	/**

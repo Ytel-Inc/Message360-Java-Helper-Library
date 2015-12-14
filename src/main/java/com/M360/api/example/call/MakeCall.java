@@ -19,28 +19,24 @@ public class MakeCall {
 		try {
 			CallRequest cr=new CallRequest();
 			cr.setFromCountryCode(1);
-			//cr.setFrom("7013358578");//and 949-201-1148
 			cr.setFrom("{fromnumber}");
-			//cr.setTo("9492294192");//polycom
 			cr.setTo("{toNumber}");//mobile
 			cr.setToCountryCode(1);
 			cr.setPlayDtmf("abc123098=");
-			cr.setUrl("http://devweb.ytel.com/ytelapi/YTELAPI-10.php");
+			cr.setUrl("{Url}");
 			if(M360Constants.JSONFORMAT){
 				String jsonCallResponse=conn.makeJsonCall(cr);
 				System.out.println(jsonCallResponse);
 			}else{
-				Message360<CallMessages> viewCall = conn.makeCall(cr);
-				if(viewCall.getMessage360().getErrors().getError().size()!=0){
-					for(int x=0;x<viewCall.getMessage360().getErrors().getError().size();x++){
-						Error error=viewCall.getMessage360().getErrors().getError().get(x);
+				Message360<CallMessages> makeCall = conn.makeCall(cr);
+				if(makeCall.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<makeCall.getMessage360().getErrors().getError().size();x++){
+						Error error=makeCall.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage());
 					}
 				}else{
 					System.out.println("Make Call");
-					int size=viewCall.getMessage360().getCall().size();
-					for(int x=0;x<size;x++){
-						Call curCall=viewCall.getMessage360().getCall().get(x);
+					for(Call curCall:makeCall.getMessage360().getCall()){
 						System.out.println(curCall.getCallSid()+","+curCall.getDirection());
 					}
 				}

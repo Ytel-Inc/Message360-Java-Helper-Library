@@ -20,8 +20,6 @@ public class UpdateNumber {
 			IncomingPhoneNumberRequest incomingPhoneRequest=new IncomingPhoneNumberRequest();
 			incomingPhoneRequest.setPhoneNumber("{phoneNumber}");//
 			incomingPhoneRequest.setFriendlyName("{FriendlyName}");//to be update
-			
-			
 			if(!M360Constants.JSONFORMAT){
 				String jsonSMSResponse=conn.updateJsonNumber(incomingPhoneRequest);
 				System.out.println(jsonSMSResponse);

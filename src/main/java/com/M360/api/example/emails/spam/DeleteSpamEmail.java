@@ -25,10 +25,10 @@ public class DeleteSpamEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonSpamEmail("rizwan@xoyal.com");
+				String jsonEmailResponse=conn.deleteJsonSpamEmail("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Spam>> deleteSpam = conn.deleteSpamEmail("rizwan@xoyal.com");
+				Message360<Message360Email<Spam>> deleteSpam = conn.deleteSpamEmail("{emailsAddress}");
 				if(deleteSpam.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteSpam.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteSpam.getMessage360().getErrors().getError().get(x);
@@ -36,9 +36,7 @@ public class DeleteSpamEmail {
 					}
 				}else{
 					System.out.println("Delete of Spam Emails");
-					int size=deleteSpam.getMessage360().getEmail().getSpam().size();
-					for(int x=0;x<size;x++){
-						EmailAddress emailAddr=deleteSpam.getMessage360().getEmail().getSpam().get(x);
+					for(EmailAddress emailAddr:deleteSpam.getMessage360().getEmail().getSpam()){
 						if(!emailAddr.getDeleteStatus().toLowerCase().equals("fail"))
 							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus());
 						else

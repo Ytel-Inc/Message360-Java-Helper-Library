@@ -18,11 +18,11 @@ public class ViewRecording {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-				if(!M360Constants.JSONFORMAT){
-					String viewRecordingResponse=conn.viewJsonRecording("32114fb6-1b1c-4b8a-cbfd-46f977cfc6ce");
+				if(M360Constants.JSONFORMAT){
+					String viewRecordingResponse=conn.viewJsonRecording("{RecordingSid}");
 					System.out.println(viewRecordingResponse);
 				}else{
-					Message360<RecordMessage> viewRecording= conn.viewRecording("c5eda6ae-ddf9-4fe2-cff8-07b83a1c1c4a");
+					Message360<RecordMessage> viewRecording= conn.viewRecording("{RecordingSid}");
 					if(viewRecording.getMessage360().getErrors().getError().size()!=0){
 						for(int x=0;x<viewRecording.getMessage360().getErrors().getError().size();x++){
 							Error error=viewRecording.getMessage360().getErrors().getError().get(x);

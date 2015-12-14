@@ -16,21 +16,20 @@ public class ListTranscription {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
+			if(M360Constants.JSONFORMAT){
 				String jsonSMSResponse=conn.listJsonTranscription();
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<TranscriptionMessage> sendSMS = conn.listTranscription();
-				if(sendSMS.getMessage360().getErrors().getError().size()!=0){
-					for(int x=0;x<sendSMS.getMessage360().getErrors().getError().size();x++){
-						Error error=sendSMS.getMessage360().getErrors().getError().get(x);
+				Message360<TranscriptionMessage> listTranscription = conn.listTranscription();
+				if(listTranscription.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<listTranscription.getMessage360().getErrors().getError().size();x++){
+						Error error=listTranscription.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
 					}
 				}else{
-					System.out.println("List Transcription"+sendSMS.getMessage360().getTranscriptionCount());
-					for(int x=0;x<sendSMS.getMessage360().getTranscriptionCount();x++){
-						Transcription curMessage=sendSMS.getMessage360().getTranscriptions().getTranscription().get(x);
-						System.out.println(x+") sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());//REMAINING  DELETE sid var in Transcription.
+					System.out.println("List Transcription");
+					for(Transcription curMessage:listTranscription.getMessage360().getTranscription()){
+						System.out.println("sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
 					}
 				}
 			}

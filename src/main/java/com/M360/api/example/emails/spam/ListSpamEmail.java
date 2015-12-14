@@ -36,9 +36,8 @@ public class ListSpamEmail {
 					}
 				}else{
 					System.out.println("List of Spam Emails");
-					for(int x=0;x<listSpam.getMessage360().getEmailCount();x++){
-						EmailAddress curInvalid =listSpam.getMessage360().getEmail().getSpam().get(x);
-						System.out.println(x+":"+curInvalid.getEmail());
+					for(EmailAddress curInvalid:listSpam.getMessage360().getEmail().getSpam()){
+						System.out.println(curInvalid.getEmail());
 					}
 				}
 			}	

@@ -17,10 +17,10 @@ public class DeleteRecording {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String recordingResponse=conn.deleteRecordingJson("ca7d6fd6-5c32-47aa-c797-a31f37a1252c");
+				String recordingResponse=conn.deleteRecordingJson("{RecordingSid}");
 				System.out.println(recordingResponse);
 			}else{
-				Message360<RecordMessage> deleteRecording= conn.deleteRecording("c9af3db8-1ee6-4bed-cb06-a5311029cc4d");
+				Message360<RecordMessage> deleteRecording= conn.deleteRecording("{RecordingSid}");
 				if(deleteRecording.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteRecording.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteRecording.getMessage360().getErrors().getError().get(x);

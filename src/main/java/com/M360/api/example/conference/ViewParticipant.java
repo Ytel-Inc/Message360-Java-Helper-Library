@@ -16,23 +16,23 @@ public class ViewParticipant {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-				if(M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.viewJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d51");
-					System.out.println(listJsonResponse);
+			if(M360Constants.JSONFORMAT){
+				String viewParticipant=conn.viewJsonParticipant("{ConferenceSid}", "{ParticipantSid}");
+				System.out.println(viewParticipant);
+			}else{
+				Message360<ConferenceMessages> viewParticipant= conn.viewParticipant("{ConferenceSid}", "{ParticipantSid}");
+				if(viewParticipant.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<viewParticipant.getMessage360().getErrors().getError().size();x++){
+						Error error=viewParticipant.getMessage360().getErrors().getError().get(x);
+							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+"\nMoreInfo:="+error.getMoreInfo().toString());
+					}
 				}else{
-					Message360<ConferenceMessages> viewParticipant= conn.viewParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5");
-					if(viewParticipant.getMessage360().getErrors().getError().size()!=0){
-						for(int x=0;x<viewParticipant.getMessage360().getErrors().getError().size();x++){
-							Error error=viewParticipant.getMessage360().getErrors().getError().get(x);
-								System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+"\nMoreInfo:="+error.getMoreInfo().toString());
-						}
-					}else{
-						System.out.println("View Participant");
-						for(Conference conference:viewParticipant.getMessage360().getParticipants().getParticipant()){
-							System.out.println(conference.getParticipantSid());
-						}
+					System.out.println("View Participant");
+					for(Conference conference:viewParticipant.getMessage360().getParticipants().getParticipant()){
+						System.out.println(conference.getParticipantSid());
 					}
 				}
+			}
 		} catch (M360Exception e) {
 			e.printStackTrace();
 		}

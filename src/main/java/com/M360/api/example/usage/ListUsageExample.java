@@ -26,7 +26,7 @@ public class ListUsageExample {
 		try {
 			
 			if(M360Constants.JSONFORMAT){
-				String listJsonUsage=conn.listJsonUsage(ProductType.OUTBOUND_CALL,null,null);//
+				String listJsonUsage=conn.listJsonUsage(ProductType.OUTBOUND_CALL,null,null);
 				System.out.println(listJsonUsage);
 			}else{
 				Message360<UsageMessage> listUsageExample = conn.listUsage(ProductType.OUTBOUND_CALL, null, null);

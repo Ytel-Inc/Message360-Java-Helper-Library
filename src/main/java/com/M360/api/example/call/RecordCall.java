@@ -18,20 +18,20 @@ public class RecordCall {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
+			Long timeout=null;
 			if(M360Constants.JSONFORMAT){
-				String jsonCallResponse=conn.recordJsonCall("63429cb9-bbce-7eda-5379-ccdd23fedbde", Direction.OUT, true, 44L, null, AudioFormat.MP3);
+				String jsonCallResponse=conn.recordJsonCall("{CallSid}", Direction.OUT, true, timeout, null, AudioFormat.MP3);
 				System.out.println(jsonCallResponse);
 			}else{
-				System.out.println("Record Call");
-				Message360<CallMessages> recordCall = conn.recordCall("d72b656c-cc38-d4b5-4412-66ed685bea25", Direction.OUT, true, 44L, null, AudioFormat.MP3);
+				Message360<CallMessages> recordCall = conn.recordCall("{CallSid}", Direction.OUT, true, timeout, null, AudioFormat.MP3);
 				if(recordCall.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<recordCall.getMessage360().getErrors().getError().size();x++){
 						Error error=recordCall.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage());
 					}
 				}else{
-					for(int x=0;x<recordCall.getMessage360().getCall().size();x++){
-						Call curCall=recordCall.getMessage360().getCall().get(x);
+					System.out.println("Record Call");
+					for(Call curCall:recordCall.getMessage360().getCall()){
 						System.out.println("Account Sid:"+curCall.getAccountSid()+",Callsid:"+curCall.getCallSid());
 					}
 				}

@@ -16,9 +16,9 @@ public class listCall {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonCallResponse=conn.listJsonCalls();
-				System.out.println(jsonCallResponse);
+			if(M360Constants.JSONFORMAT){
+				String listCallJsonResponse=conn.listJsonCalls();
+				System.out.println(listCallJsonResponse);
 			}else{
 				Message360<CallMessages> listCall = conn.listCalls();
 				if(listCall.getMessage360().getErrors().getError().size()!=0){
@@ -28,9 +28,8 @@ public class listCall {
 					}
 				}else{
 					System.out.println("List Calls");
-					for(int x=0;x<listCall.getMessage360().getCallCount();x++){
-						Call curCall=listCall.getMessage360().getCalls().getCall().get(x);
-						System.out.println(x+")Account "+curCall.getAccountSid()+",call sid "+curCall.getCallSid());
+					for(Call curCall:listCall.getMessage360().getCalls().getCall()){
+						System.out.println("Account "+curCall.getAccountSid()+",call sid "+curCall.getCallSid());
 					}
 				}
 			}
