@@ -25,10 +25,10 @@ public class DeleteUnsubscribedEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonUnsubsribeEmailAddress("hi@2.com");
+				String jsonEmailResponse=conn.deleteJsonUnsubsribeEmailAddress("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Unsubscribed>> deleteUnsubscribe = conn.deleteUnsubsribeEmailAddress("hi@3.com");
+				Message360<Message360Email<Unsubscribed>> deleteUnsubscribe = conn.deleteUnsubsribeEmailAddress("{emailsAddress}");
 				if(deleteUnsubscribe.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteUnsubscribe.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteUnsubscribe.getMessage360().getErrors().getError().get(x);
@@ -36,9 +36,7 @@ public class DeleteUnsubscribedEmail {
 					}
 				}else{
 					System.out.println("Delete Unsubscribe Emails");
-					int size=deleteUnsubscribe.getMessage360().getEmail().getUnsubscribed().size();
-					for(int x=0;x<size;x++){
-						EmailAddress emailAddr=deleteUnsubscribe.getMessage360().getEmail().getUnsubscribed().get(x);
+					for(EmailAddress emailAddr:deleteUnsubscribe.getMessage360().getEmail().getUnsubscribed()){
 						if(!emailAddr.getDeleteStatus().toLowerCase().equals("fail"))
 							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus());
 						else

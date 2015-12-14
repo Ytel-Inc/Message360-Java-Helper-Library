@@ -16,20 +16,20 @@ public class RecordingTranscription {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.recordingJsonTranscription("3e503cdf-5602-4bd3-cbe2-e13372c28e42");
+			if(M360Constants.JSONFORMAT){
+				String jsonSMSResponse=conn.recordingJsonTranscription("{RecordingSid}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<TranscriptionMessage> audioUrlTrans = conn.recordingTranscription("19ca9ccf-d3a4-40d9-c0ed-1095dc5ffe91123");
+				Message360<TranscriptionMessage> audioUrlTrans = conn.recordingTranscription("{RecordingSid}");
 				if(audioUrlTrans.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<audioUrlTrans.getMessage360().getErrors().getError().size();x++){
 						Error error=audioUrlTrans.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
 					}
 				}else{
-					for(int x=0;x<audioUrlTrans.getMessage360().getTranscription().size();x++){
-						Transcription curMessage=audioUrlTrans.getMessage360().getTranscription().get(x);
-						System.out.println(x+") sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
+					System.out.println("Recording Transcription");
+					for(Transcription curMessage:audioUrlTrans.getMessage360().getTranscription()){
+						System.out.println(" sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
 					}
 				}
 			}

@@ -26,11 +26,11 @@ public class SendEmails {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.sendJsonEmail("rizwanxoyal.com,nitinxoyal.com", "subject", "Send Mail From Json Development Java Library.!");
+			if(M360Constants.JSONFORMAT){
+				String jsonEmailResponse=conn.sendJsonEmail("{emailsAddress}", "{subject}", "{body}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<SendEmail>> smsMessage = conn.sendEmail("rizwanxoyal.com,nitinxoyal.com", "subject", "Send Mail From Development Java Library.!");
+				Message360<Message360Email<SendEmail>> smsMessage = conn.sendEmail("{emailsAddress}", "{subject}", "{body}");
 				if(smsMessage.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<smsMessage.getMessage360().getErrors().getError().size();x++){
 						Error error=smsMessage.getMessage360().getErrors().getError().get(x);

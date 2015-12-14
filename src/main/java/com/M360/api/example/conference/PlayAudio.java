@@ -16,23 +16,23 @@ public class PlayAudio {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-				if(!M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.playJsonAudio("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5","https://storage.googleapis.com/m360-102504/2015-12-04/1449212759_9492080471.mp3");
-					System.out.println(listJsonResponse);
+			if(M360Constants.JSONFORMAT){
+				String viewConference=conn.playJsonAudio("{ConferenceSid}", "{ParticipantSid}","{AudioUrl}");
+				System.out.println(viewConference);
+			}else{
+				Message360<ConferenceMessages> viewConference= conn.playAudio("{ConferenceSid}", "{ParticipantSid}","{AudioUrl}");
+				if(viewConference.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<viewConference.getMessage360().getErrors().getError().size();x++){
+						Error error=viewConference.getMessage360().getErrors().getError().get(x);
+							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
+					}
 				}else{
-					Message360<ConferenceMessages> viewConference= conn.playAudio("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5","https://storage.googleapis.com/m360-102504/2015-12-04/1449212759_9492080471.mp3");
-					if(viewConference.getMessage360().getErrors().getError().size()!=0){
-						for(int x=0;x<viewConference.getMessage360().getErrors().getError().size();x++){
-							Error error=viewConference.getMessage360().getErrors().getError().get(x);
-								System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
-						}
-					}else{
-						System.out.println("Deaf Mute Participant");
-						for(Conference conference:viewConference.getMessage360().getConferences().getConference()){
-							System.out.println("Participant Sid:="+conference.getParticipantSid());
-						}
+					System.out.println("Deaf Mute Participant");
+					for(Conference conference:viewConference.getMessage360().getConferences().getConference()){
+						System.out.println("Participant Sid:="+conference.getParticipantSid());
 					}
 				}
+			}
 		} catch (M360Exception e) {
 			e.printStackTrace();
 		}

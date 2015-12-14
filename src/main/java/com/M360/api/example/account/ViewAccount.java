@@ -23,15 +23,14 @@ public class ViewAccount {
 
 	public static void main(String[] args) {
 		BasicM360Configuration conf = new BasicM360Configuration();
-		conf.setSid(M360Constants.ACCOUNTSID1); ///if account sid is wrong
+		conf.setSid(M360Constants.ACCOUNTSID);
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){//this section will return the JSON formate as we disccussed earles
+			if(M360Constants.JSONFORMAT){
 				String accountResponse=conn.viewJsonAccount();
 				System.out.println(accountResponse);
-			}else{//and this section will generrate the code with Java-Mapping Sounds good.
-				//can i run? yes.
+			}else{
 				Message360<AccountMessage> accountExample = conn.viewAccount();
 				if(accountExample.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<accountExample.getMessage360().getErrors().getError().size();x++){
@@ -47,37 +46,3 @@ public class ViewAccount {
 		}
 	}
 }
-/*Json format looks good
- * {
-    "Message360": {
-        "ResponseStatus": 1,
-        "Message": {
-            "Status": "Active",
-            "AccountBalance": "$924.0058",
-            "InboundCalls": 1686,
-            "OutboundCalls": 10115,
-            "InboundSMS": 3,
-            "OutboundSMS": 982,
-            "Email": 106,
-            "PhoneNumbers": 119,
-            "Address": 22,
-            "Areamail": 0,
-            "Checks": 0,
-            "Jobs": 0,
-            "Letters": 1,
-            "Objects": 0,
-            "Postcard": 5,
-            "Transcriptions": 1178,
-            "DateCreated": "2015-03-02 02:11:40",
-            "DateUpdated": "2015-11-11 10:47:15",
-            "TimeZone": "(GMT-08:00) Pacific Time (US & Canada)",
-            "AccountSid": "YT94c49d220e5a45dc516f9733460460f5"
-        }
-    }
-}
-JAva-Mappinf error 
-code :=ER-M360-GL-1500.
-Message:=Your Account Sid or Auth Token is incorrect.
-I follwed this way ..is it right? Seems good to me.
-wait
- */

@@ -20,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.client.ClientResponse;
 
 import com.M360.api.domain.Message360;
+import com.M360.api.domain.enums.HttpMethod;
 import com.M360.api.domain.responses.SMSMessages;
 
 public interface SmsProxy {
@@ -53,7 +54,7 @@ public interface SmsProxy {
 			@QueryParam(value="To") String to,
 			@QueryParam(value="From") String from,
 			@QueryParam(value="Body") String body,
-			@QueryParam(value="method") String method,
+			@QueryParam(value="method") HttpMethod method,
 			@QueryParam(value="FromCountryCode") Integer fromcountrycode,
 			@QueryParam(value="ToCountryCode") Integer tocountrycode,
 			@QueryParam(value="StatusCallback") String statusCallback

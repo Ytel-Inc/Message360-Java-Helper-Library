@@ -17,18 +17,18 @@ public class HangupParticipant {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String listJsonResponse=conn.hangupJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d51");
-				System.out.println(listJsonResponse);
+				String hangupParticipant=conn.hangupJsonParticipant("{ConferenceSid}", "{ParticipantSid}");
+				System.out.println(hangupParticipant);
 			}else{
-				Message360<ConferenceMessages> viewParticipant= conn.hangupParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d51");
-				if(viewParticipant.getMessage360().getErrors().getError().size()!=0){
-					for(int x=0;x<viewParticipant.getMessage360().getErrors().getError().size();x++){
-						Error error=viewParticipant.getMessage360().getErrors().getError().get(x);
+				Message360<ConferenceMessages> hangupParticipant= conn.hangupParticipant("{ConferenceSid}", "{ParticipantSid}");
+				if(hangupParticipant.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<hangupParticipant.getMessage360().getErrors().getError().size();x++){
+						Error error=hangupParticipant.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+"\nMoreInfo:="+error.getMoreInfo().toString());
 					}
 				}else{
 					System.out.println("Hangup Participant");
-					for(Conference conference:viewParticipant.getMessage360().getParticipants().getParticipant()){
+					for(Conference conference:hangupParticipant.getMessage360().getParticipants().getParticipant()){
 						System.out.println(conference.getParticipantSid());
 					}
 				}

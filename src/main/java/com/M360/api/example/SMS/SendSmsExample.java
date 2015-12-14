@@ -16,6 +16,7 @@ import com.M360.api.configuration.M360Constants;
 import com.M360.api.domain.Message360;
 import com.M360.api.domain.responses.SMSMessages;
 import com.M360.api.domain.SMS.Message;
+import com.M360.api.domain.enums.HttpMethod;
 import com.M360.api.exception.Error;
 import com.M360.api.exception.M360Exception;
 public class SendSmsExample {
@@ -27,19 +28,18 @@ public class SendSmsExample {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.sendJsonSmsMessage("9495350301","9493961707","This is an SMS message sent from the Message360-API Java wrapper! Easy as 1, 2, 3!"+new Date(),"Post",1,1,null);
+				String jsonSMSResponse=conn.sendJsonSmsMessage("{toNumber}","{fromNumber}","This is an SMS message sent from the Message360-API Java wrapper! Easy as 1, 2, 3!"+new Date(),HttpMethod.POST,1,1,null);
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<SMSMessages> sendSMS = conn.sendSmsMessage("9495350301","9493961707","This is an SMS message sent from the Message360-API Java wrapper! Easy as 1, 2, 3!"+new Date(),"Post",1,1,null);
+				Message360<SMSMessages> sendSMS = conn.sendSmsMessage("{toNumber}","{fromNumber}","This is an SMS message sent from the Message360-API Java wrapper! Easy as 1, 2, 3!"+new Date(),HttpMethod.POST,1,1,null);
 				if(sendSMS.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<sendSMS.getMessage360().getErrors().getError().size();x++){
 						Error error=sendSMS.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
 					}
 				}else{
-					for(int x=0;x<sendSMS.getMessage360().getMsgCount();x++){
-						Message curMessage=sendSMS.getMessage360().getMessages().getMessage().get(x);
-						System.out.println(x+") sid="+curMessage.getSid()+",status:="+curMessage.getStatus());
+					for(Message curMessage:sendSMS.getMessage360().getMessages().getMessage()){
+						System.out.println("sid="+curMessage.getSid()+",status:="+curMessage.getStatus());
 					}
 				}
 			}	

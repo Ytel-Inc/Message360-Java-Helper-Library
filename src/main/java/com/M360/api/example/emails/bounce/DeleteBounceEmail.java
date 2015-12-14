@@ -24,11 +24,11 @@ public class DeleteBounceEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonBounceEmail("xyz@xyz.com");
+			if(M360Constants.JSONFORMAT){
+				String jsonEmailResponse=conn.deleteJsonBounceEmail("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Bounce>> deleteBounceEmail = conn.deleteBounceEmail("xyztestaaa");
+				Message360<Message360Email<Bounce>> deleteBounceEmail = conn.deleteBounceEmail("{emailsAddress}");
 				if(deleteBounceEmail.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteBounceEmail.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteBounceEmail.getMessage360().getErrors().getError().get(x);
@@ -36,11 +36,12 @@ public class DeleteBounceEmail {
 					}
 				}else{
 					System.out.println("Delete Bounce Email");;
-					EmailAddress curCounceEmailAddres=deleteBounceEmail.getMessage360().getEmail().getBounce().get(0);
-					if(curCounceEmailAddres.getDeleteStatus().toLowerCase().equals("fail"))
-						System.out.println(curCounceEmailAddres.getEmail()+",\tDeleteStatus :="+curCounceEmailAddres.getDeleteStatus()+",\tReason:="+curCounceEmailAddres.getReason());
-					else
-						System.out.println(curCounceEmailAddres.getEmail()+",\tDeleteStatus :="+curCounceEmailAddres.getDeleteStatus());
+					for(EmailAddress curBounceEmailAddres:deleteBounceEmail.getMessage360().getEmail().getBounce()){
+						if(curBounceEmailAddres.getDeleteStatus().toLowerCase().equals("fail"))
+							System.out.println(curBounceEmailAddres.getEmail()+",\tDeleteStatus :="+curBounceEmailAddres.getDeleteStatus()+",\tReason:="+curBounceEmailAddres.getReason());
+						else
+							System.out.println(curBounceEmailAddres.getEmail()+",\tDeleteStatus :="+curBounceEmailAddres.getDeleteStatus());
+					}
 				}
 			}
 		} catch (M360Exception e) {

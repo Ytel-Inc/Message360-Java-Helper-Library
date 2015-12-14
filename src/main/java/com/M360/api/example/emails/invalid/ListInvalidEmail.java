@@ -24,7 +24,7 @@ public class ListInvalidEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
+			if(M360Constants.JSONFORMAT){
 				String jsonEmailResponse=conn.listJsonInvalidEmail();
 				System.out.println(jsonEmailResponse);
 			}else{
@@ -36,9 +36,8 @@ public class ListInvalidEmail {
 					}
 				}else{
 					System.out.println("List of Invalid Emails");
-					for(int x=0;x<invalidEmailList.getMessage360().getEmailCount();x++){
-						EmailAddress curInvalid =invalidEmailList.getMessage360().getEmail().getInvalid().get(x);
-						System.out.println(x+":"+curInvalid.getEmail()+"\tReason:"+curInvalid.getReason());
+					for(EmailAddress curInvalid:invalidEmailList.getMessage360().getEmail().getInvalid()){
+						System.out.println(curInvalid.getEmail()+"\tReason:"+curInvalid.getReason());
 					}
 				}
 			}

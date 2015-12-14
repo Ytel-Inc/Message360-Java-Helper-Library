@@ -17,19 +17,19 @@ public class AudioUrlTranscription {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonSMSResponse=conn.audioUrlJsonTranscription("https://storage.googleapis.com/m360-102504/2015-12-01/1448970946_9492080471123.mp3");
+				String jsonSMSResponse=conn.audioUrlJsonTranscription("{AudioUrl}");
 				System.out.println(jsonSMSResponse);
 			}else{
-				Message360<TranscriptionMessage> audioUrlTrans = conn.audioUrlTranscription("https://storage.googleapis.com/m360-102504/2015-12-01/1448970946_9492080471.mp3");
+				Message360<TranscriptionMessage> audioUrlTrans = conn.audioUrlTranscription("{AudioUrl}");
 				if(audioUrlTrans.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<audioUrlTrans.getMessage360().getErrors().getError().size();x++){
 						Error error=audioUrlTrans.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
 					}
 				}else{
-					for(int x=0;x<audioUrlTrans.getMessage360().getTranscription().size();x++){
-						Transcription curMessage=audioUrlTrans.getMessage360().getTranscription().get(x);
-						System.out.println(x+") sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
+					System.out.println("AudioUrls");
+					for(Transcription curMessage:audioUrlTrans.getMessage360().getTranscription()){
+						System.out.println("sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
 					}
 				}
 			}

@@ -16,12 +16,11 @@ public class viewCall {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			
-			if(!M360Constants.JSONFORMAT){
-				String jsonCallResponse=conn.viewJsonCall("e353e538-34a0-cedc-3082-23e08215cf0611111");
+			if(M360Constants.JSONFORMAT){
+				String jsonCallResponse=conn.viewJsonCall("{CallSid}");
 				System.out.println(jsonCallResponse);
 			}else{
-				Message360<CallMessages> viewCall = conn.viewCall("e353e538-34a0-cedc-3082-23e08215cf06111");
+				Message360<CallMessages> viewCall = conn.viewCall("{CallSid}");
 				if(viewCall.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<viewCall.getMessage360().getErrors().getError().size();x++){
 						Error error=viewCall.getMessage360().getErrors().getError().get(x);
@@ -29,13 +28,10 @@ public class viewCall {
 					}
 				}else{
 					System.out.println("View Call");
-					int size=viewCall.getMessage360().getCall().size();
-					for(int x=0;x<size;x++){
-						Call curCall=viewCall.getMessage360().getCall().get(x);
+					for(Call curCall:viewCall.getMessage360().getCall()){
 						System.out.println(curCall.getCallSid());
 					}
 				}
-				
 			}
 		} catch (M360Exception e) {
 			e.printStackTrace();
