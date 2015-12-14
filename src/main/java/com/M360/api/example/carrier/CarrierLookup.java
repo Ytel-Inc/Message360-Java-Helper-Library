@@ -15,11 +15,11 @@ public class CarrierLookup {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.carrierJsonLookup("2034092936");
+			if(M360Constants.JSONFORMAT){
+				String jsonEmailResponse=conn.carrierJsonLookup("{phoneNumber}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<CarrierMessage> carrierLookup = conn.carrierLookup("2034092936");
+				Message360<CarrierMessage> carrierLookup = conn.carrierLookup("{phoneNumber}");
 				if(carrierLookup.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<carrierLookup.getMessage360().getErrors().getError().size();x++){
 						Error error=carrierLookup.getMessage360().getErrors().getError().get(x);
