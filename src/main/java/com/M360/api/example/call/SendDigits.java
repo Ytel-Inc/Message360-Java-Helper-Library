@@ -18,19 +18,18 @@ public class SendDigits {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String jsonCallResponse=conn.sendJsonDigits("03c4aaf0-0b7a-0fd0-edfe-a7e4010b246c", "123454srrizwad", Direction.IN);
+				String jsonCallResponse=conn.sendJsonDigits("{CallSid}", "{playDtmf}", Direction.IN);
 				System.out.println(jsonCallResponse);
 			}else{
-				System.out.println("sendDigit Calls");
-				Message360<CallMessages> sendDigit = conn.sendDigits("2eaff4d2-b983-da87-fe9c-26765d7d296d", "123454srrizwad", Direction.IN);
+				Message360<CallMessages> sendDigit = conn.sendDigits("{CallSid}", "{playDtmf}", Direction.IN);
 				if(sendDigit.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<sendDigit.getMessage360().getErrors().getError().size();x++){
 						Error error=sendDigit.getMessage360().getErrors().getError().get(x);
 							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage());
 					}
 				}else{
-					for(int x=0;x<sendDigit.getMessage360().getCall().size();x++){
-						Call curCall=sendDigit.getMessage360().getCall().get(x);
+					System.out.println("sendDigit Calls");
+					for(Call curCall:sendDigit.getMessage360().getCall()){
 						System.out.println("Account Sid:"+curCall.getAccountSid()+",Callsid:"+curCall.getCallSid());
 					}
 				}

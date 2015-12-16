@@ -16,23 +16,23 @@ public class DeafMuteParticipant {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-				if(!M360Constants.JSONFORMAT){
-					String listJsonResponse=conn.deafMuteJsonParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5", true, true);
-					System.out.println(listJsonResponse);
+			if(M360Constants.JSONFORMAT){
+				String deafMuteConference=conn.deafMuteJsonParticipant("{ConferenceSid}", "{ParticipantSid}", true, true);
+				System.out.println(deafMuteConference);
+			}else{
+				Message360<ConferenceMessages> deafMuteConference= conn.deafMuteParticipant("{ConferenceSid}", "{ParticipantSid}", null, null);
+				if(deafMuteConference.getMessage360().getErrors().getError().size()!=0){
+					for(int x=0;x<deafMuteConference.getMessage360().getErrors().getError().size();x++){
+						Error error=deafMuteConference.getMessage360().getErrors().getError().get(x);
+							System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
+					}
 				}else{
-					Message360<ConferenceMessages> viewConference= conn.deafMuteParticipant("CF7eba209c-9aaf-42c6-805a-3c3eb623138d", "ef533163-3f15-70c1-cc34-49264dc5b5d5", null, null);
-					if(viewConference.getMessage360().getErrors().getError().size()!=0){
-						for(int x=0;x<viewConference.getMessage360().getErrors().getError().size();x++){
-							Error error=viewConference.getMessage360().getErrors().getError().get(x);
-								System.out.println("code :="+error.getCode()+".\nMessage:="+error.getMessage()+",\nMoreInfo"+error.getMoreInfo().toString());
-						}
-					}else{
-						System.out.println("Deaf Mute Participant");
-						for(Conference conference:viewConference.getMessage360().getConferences().getConference()){
-							System.out.println("Participant Sid:="+conference.getParticipantSid());
-						}
+					System.out.println("Deaf Mute Participant");
+					for(Conference conference:deafMuteConference.getMessage360().getConferences().getConference()){
+						System.out.println("Participant Sid:="+conference.getParticipantSid());
 					}
 				}
+			}
 		} catch (M360Exception e) {
 			e.printStackTrace();
 		}

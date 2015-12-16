@@ -26,11 +26,11 @@ public class DeleteBlockEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("rizwan@xoyal.com");
+			if(M360Constants.JSONFORMAT){
+				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("{emailsAddress}");
 				System.out.println(deleteJsonBlockEmailAddr);
 			}else{
-				Message360<Message360Email<Blocked>> deleteBlocEmailAddr = conn.deleteBlocksEmailAdress("salaman@srk.com");
+				Message360<Message360Email<Blocked>> deleteBlocEmailAddr = conn.deleteBlocksEmailAdress("{emailsAddress}");
 				if(deleteBlocEmailAddr.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteBlocEmailAddr.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteBlocEmailAddr.getMessage360().getErrors().getError().get(x);
@@ -38,12 +38,14 @@ public class DeleteBlockEmail {
 					}
 				}else{
 					System.out.println("Delete Blocks Email");
-					EmailAddress curBlockEmailAddres=deleteBlocEmailAddr.getMessage360().getEmail().getBlocked().get(0);
-					if(curBlockEmailAddres.getDeleteStatus().toLowerCase().equals("fail")){
-						System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus()+",Reason:="+curBlockEmailAddres.getReason());
-					}else{
-						System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus());
+					for(EmailAddress curBlockEmailAddres:deleteBlocEmailAddr.getMessage360().getEmail().getBlocked()){
+						if(curBlockEmailAddres.getDeleteStatus().toLowerCase().equals("fail")){
+							System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus()+",Reason:="+curBlockEmailAddres.getReason());
+						}else{
+							System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus());
+						}
 					}
+					
 				}
 			}
  		} catch (M360Exception e) {

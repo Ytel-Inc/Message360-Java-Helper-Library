@@ -25,10 +25,10 @@ public class AddUnsubscribeEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.addJsonUnsubsribeEmailAddress("hi@3.com");
+				String jsonEmailResponse=conn.addJsonUnsubsribeEmailAddress("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Unsubscribed>> addUnsubscribed = conn.addUnsubsribeEmailAddress("hi@4.com");
+				Message360<Message360Email<Unsubscribed>> addUnsubscribed = conn.addUnsubsribeEmailAddress("{emailsAddress}");
 				if(addUnsubscribed.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<addUnsubscribed.getMessage360().getErrors().getError().size();x++){
 						Error error=addUnsubscribed.getMessage360().getErrors().getError().get(x);
@@ -36,9 +36,7 @@ public class AddUnsubscribeEmail {
 					}
 				}else{
 					System.out.println("Add Unsubscribe Emails");
-					int size=addUnsubscribed.getMessage360().getEmail().getUnsubscribed().size();
-					for(int x=0;x<size;x++){
-						EmailAddress emailAddr=addUnsubscribed.getMessage360().getEmail().getUnsubscribed().get(x);
+					for(EmailAddress emailAddr:addUnsubscribed.getMessage360().getEmail().getUnsubscribed()){
 						if(!emailAddr.getAddStatus().toLowerCase().equals("fail"))
 							System.out.println("20:Email:= "+emailAddr.getEmail()+",Add Status:="+emailAddr.getAddStatus());
 						else

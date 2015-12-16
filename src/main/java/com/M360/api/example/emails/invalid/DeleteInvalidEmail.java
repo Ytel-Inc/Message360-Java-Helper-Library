@@ -25,11 +25,11 @@ public class DeleteInvalidEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.deleteJsonInvalidEmail("abc@2.com");
+			if(M360Constants.JSONFORMAT){
+				String jsonEmailResponse=conn.deleteJsonInvalidEmail("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Invalid>> deletedInvalidEmails = conn.deleteInValidEmail("sdfs@1.com");
+				Message360<Message360Email<Invalid>> deletedInvalidEmails = conn.deleteInValidEmail("{emailsAddress}");
 				if(deletedInvalidEmails.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deletedInvalidEmails.getMessage360().getErrors().getError().size();x++){
 						Error error=deletedInvalidEmails.getMessage360().getErrors().getError().get(x);
@@ -37,13 +37,13 @@ public class DeleteInvalidEmail {
 					}
 				}else{
 					System.out.println("Delete Invalid Emails");
-					EmailAddress deleteInvalid=deletedInvalidEmails.getMessage360().getEmail().getInvalid().get(0);
-					if(deleteInvalid.getDeleteStatus().toLowerCase().equals("fail")){
-						System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus()+",Reason:="+deleteInvalid.getReason());	
-					}else{
-						System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus());
-					}
-						
+					for(EmailAddress deleteInvalid:deletedInvalidEmails.getMessage360().getEmail().getInvalid()){
+						if(deleteInvalid.getDeleteStatus().toLowerCase().equals("fail")){
+							System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus()+",Reason:="+deleteInvalid.getReason());	
+						}else{
+							System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus());
+						}
+					}	
 				}
 			}
 		} catch (M360Exception e) {

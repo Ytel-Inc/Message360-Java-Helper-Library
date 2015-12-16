@@ -29,9 +29,8 @@ public class AvailablePhoneNumber {
 					}
 				}else{
 					System.out.println("List of Available Phone number:");
-					for(int x=0;x<availablePhoneNumberMessage.getMessage360().getPhoneCount();x++){
-						Phone curPhone=availablePhoneNumberMessage.getMessage360().getPhones().getPhone().get(x);
-						System.out.println(x+") sid="+curPhone.getPhoneNumber()+",Voice Enabled:="+curPhone.getVoiceEnabled()+",SMS Enabled:="+curPhone.getSmsEnabled());//REMAINING  DELETE sid var in Transcription.
+					for(Phone curPhone:availablePhoneNumberMessage.getMessage360().getPhones().getPhone()){
+						System.out.println("sid="+curPhone.getPhoneNumber()+",Voice Enabled:="+curPhone.getVoiceEnabled()+",SMS Enabled:="+curPhone.getSmsEnabled());
 					}
 				}
 			}

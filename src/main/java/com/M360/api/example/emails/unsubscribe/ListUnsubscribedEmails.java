@@ -36,8 +36,7 @@ public class ListUnsubscribedEmails {
 					}
 				}else{
 					System.out.println("List Unsubscribe Emails");
-					for(int x=0;x<unSubscribedList.getMessage360().getEmailCount();x++){
-						EmailAddress emailAddr=unSubscribedList.getMessage360().getEmail().getUnsubscribed().get(x);
+					for(EmailAddress emailAddr:unSubscribedList.getMessage360().getEmail().getUnsubscribed()){
 						System.out.println("20:Email:= "+emailAddr.getEmail());
 					}
 				}

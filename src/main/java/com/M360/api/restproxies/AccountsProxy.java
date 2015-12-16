@@ -20,10 +20,6 @@ import com.M360.api.domain.Message360;
 
 public interface AccountsProxy {
 	
-	
-	//Call REST urls here.ok
-	//so  But I think so. i uploaded this on GIt HUB?  You need to ask Matt about that.nice
-	
 	@GET
 	@Path("accounts/viewaccount.json")
 	@Produces("application/json")

@@ -25,6 +25,7 @@ import com.M360.api.domain.email.Bounce;
 import com.M360.api.domain.email.Invalid;
 import com.M360.api.domain.responses.AccountMessage;
 import com.M360.api.domain.responses.CallMessages;
+import com.M360.api.domain.responses.CarrierMessage;
 import com.M360.api.domain.responses.ConferenceMessages;
 import com.M360.api.domain.responses.Message360Email;
 import com.M360.api.domain.responses.NumberMessage;
@@ -38,7 +39,6 @@ import com.M360.api.domain.email.Unsubscribed;
 import com.M360.api.domain.enums.AudioDirection;
 import com.M360.api.domain.enums.AudioFormat;
 import com.M360.api.domain.enums.CallInterruptStatus;
-import com.M360.api.domain.enums.CallStatus;
 import com.M360.api.domain.enums.ConferenceStatus;
 import com.M360.api.domain.enums.Direction;
 import com.M360.api.domain.enums.HttpMethod;
@@ -51,6 +51,7 @@ import com.M360.api.requests.CallRequest;
 import com.M360.api.requests.IncomingPhoneNumberRequest;
 import com.M360.api.restproxies.AccountsProxy;
 import com.M360.api.restproxies.CallProxy;
+import com.M360.api.restproxies.CarrierProxy;
 import com.M360.api.restproxies.ConferenceProxy;
 import com.M360.api.restproxies.EmailProxy;
 import com.M360.api.restproxies.PhoneProxy;
@@ -75,6 +76,7 @@ public class Message360Connector {
 	private UsageProxy usageProxy;
 	private ConferenceProxy conferenceProxy;
 	private EmailProxy emailProxy;
+	private CarrierProxy carrierProxy;
 	
 
 	/**
@@ -100,6 +102,7 @@ public class Message360Connector {
 		usageProxy =createProxy(UsageProxy.class);
 		conferenceProxy = createProxy(ConferenceProxy.class);
 		emailProxy = createProxy(EmailProxy.class);
+		carrierProxy = createProxy(CarrierProxy.class);
 	}
 
 	private <T> T createProxy(Class<T> clazz) {
@@ -271,18 +274,18 @@ public class Message360Connector {
 	* @throws M360Exception
 	*/
 	public Message360<SMSMessages> sendSmsMessage(String accountSid, String to, String from,
-		String body,String method, Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
+		String body,HttpMethod method, Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
 	ClientResponse<Message360<SMSMessages>> smsMessage = smsProxy.sendSmsMessage(
 			accountSid, to, from, body,method,fromCountryCode,toCountryCode, statusCallback);
 	return returnThrows(smsMessage);
 	}
 	
-	public Message360<SMSMessages> sendSmsMessage(String to, String from, String body,String method,Integer fromCountryCode,Integer toCountryCode,
+	public Message360<SMSMessages> sendSmsMessage(String to, String from, String body,HttpMethod method,Integer fromCountryCode,Integer toCountryCode,
 		String statusCallback) throws M360Exception {
 	return sendSmsMessage(conf.getSid(), to, from, body,method,fromCountryCode,toCountryCode, statusCallback);
 	}
 	
-	public String  sendJsonSmsMessage(String to, String from, String body,String method,Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
+	public String  sendJsonSmsMessage(String to, String from, String body,HttpMethod method,Integer fromCountryCode,Integer toCountryCode,String statusCallback) throws M360Exception {
 		return smsProxy.sendSmsMessage(conf.getSid(), to, from, body,method,fromCountryCode,toCountryCode, statusCallback).getEntity(String.class);
 	}
 	
@@ -650,9 +653,15 @@ public class Message360Connector {
 	public Message360<CallMessages> voiceEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo);
 	}
+	public Message360<CallMessages> voiceEffects(String callSid) throws M360Exception{
+		return voiceEffects(conf.getSid(),null, null, null, null, null, null, null);
+	}
 	
 	public String voiceJsonEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
 		return callProxy.voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo).getEntity(String.class);
+	}
+	public String voiceJsonEffects(String callSid) throws M360Exception{
+		return callProxy.voiceEffects(conf.getSid(),callSid, null, null, null, null, null, null).getEntity(String.class);
 	}
 	
 	/**
@@ -1467,5 +1476,54 @@ public class Message360Connector {
 	public String playJsonAudio(String conferenceSid,String participantsid,String audiourl)throws M360Exception{
 		return conferenceProxy.playAudio(conf.getSid(), conferenceSid, participantsid,audiourl).getEntity(String.class);
 	}
+	
+	////////////////
+	////Carrier
+	///////////////
+	
+	/**{@link #carrierLookup(String)}
+	 * 
+	 * @param sid
+	 * @param phoneNumber
+	 * @return
+	 * @throws M360Exception
+	 */
+	
+	public Message360<CarrierMessage> carrierLookup(String sid,String phoneNumber)throws M360Exception{
+		ClientResponse<Message360<CarrierMessage>> carrierLookup=carrierProxy.carrierLookup(conf.getSid(), phoneNumber);
+		return returnThrows(carrierLookup);
+	}
+	
+	public Message360<CarrierMessage> carrierLookup(String phoneNumber)throws M360Exception{
+		return carrierLookup(conf.getSid(),phoneNumber);
+	}
+	
+	public String carrierJsonLookup(String phoneNumber)throws M360Exception{
+		return carrierProxy.carrierLookup(conf.getSid(), phoneNumber).getEntity(String.class);
+	}
+	
+	
+	public Message360<CarrierMessage> carrierLookupList(String sid,Long page,Long pageSize)throws M360Exception{
+		ClientResponse<Message360<CarrierMessage>> carrierLookup=carrierProxy.carrierLookupList(conf.getSid(), page,pageSize);
+		return returnThrows(carrierLookup);
+	}
+	
+	public Message360<CarrierMessage> carrierLookupList(Long page,Long pageSize)throws M360Exception{
+		return carrierLookupList(conf.getSid(),page,pageSize);
+	}
+	public Message360<CarrierMessage> carrierLookupList()throws M360Exception{
+		return carrierLookupList(conf.getSid(),null,null);
+	}
+	
+	
+	public String carrierJsonLookupList(Long page,Long pageSize)throws M360Exception{
+		return carrierProxy.carrierLookupList(conf.getSid(), page,pageSize).getEntity(String.class);
+	}
+	
+	public String carrierJsonLookupList()throws M360Exception{
+		return carrierProxy.carrierLookupList(conf.getSid(), null,null).getEntity(String.class);
+	}
+	
+	
 	
 }

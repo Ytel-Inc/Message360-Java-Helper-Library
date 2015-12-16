@@ -36,9 +36,8 @@ public class ListBouncesEmails {
 					}
 				}else{
 					System.out.println("List of Bounces Emails.");
-					for(int x=0;x<bounceList.getMessage360().getEmailCount();x++){
-						EmailAddress curCounceEmailAddres=bounceList.getMessage360().getEmail().getBounce().get(x);
-						System.out.println(x+":"+curCounceEmailAddres.getEmail()+",\tStatus:="+curCounceEmailAddres.getStatus()+",\tReason:="+curCounceEmailAddres.getReason());
+					for(EmailAddress curBounceEmailAddres:bounceList.getMessage360().getEmail().getBounce()){
+						System.out.println(curBounceEmailAddres.getEmail()+",\tStatus:="+curBounceEmailAddres.getStatus()+",\tReason:="+curBounceEmailAddres.getReason());
 					}
 				}
 			}	
