@@ -16,7 +16,7 @@ public class BuyNumber {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(!M360Constants.JSONFORMAT){
+			if(M360Constants.JSONFORMAT){
 				String jsonSMSResponse=conn.buyJsonNumber("{phoneNumber}");
 				System.out.println(jsonSMSResponse);
 			}else{

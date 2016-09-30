@@ -36,7 +36,7 @@ public class ListBlocksEmails {
 					}
 				}else{
 					System.out.println("List Block Emails ");
-					for(EmailAddress curBlockEmailAddres:listBlocksEmailAddr.getMessage360().getEmail().getBlocked()){
+					for(EmailAddress curBlockEmailAddres:listBlocksEmailAddr.getMessage360().getEmail().getBlockedEmailAddresses()){
 						System.out.println(curBlockEmailAddres.getEmail()+",\tReason:="+curBlockEmailAddres.getReason());
 					}
 				}

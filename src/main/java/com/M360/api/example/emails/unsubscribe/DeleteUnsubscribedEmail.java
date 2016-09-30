@@ -28,7 +28,7 @@ public class DeleteUnsubscribedEmail {
 				String jsonEmailResponse=conn.deleteJsonUnsubsribeEmailAddress("{emailsAddress}");
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Unsubscribed>> deleteUnsubscribe = conn.deleteUnsubsribeEmailAddress("{emailsAddress}");
+				Message360<Message360Email<Unsubscribed>> deleteUnsubscribe = conn.deleteUnsubsribeEmailAddress("emailsAddress");
 				if(deleteUnsubscribe.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteUnsubscribe.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteUnsubscribe.getMessage360().getErrors().getError().get(x);
@@ -36,12 +36,8 @@ public class DeleteUnsubscribedEmail {
 					}
 				}else{
 					System.out.println("Delete Unsubscribe Emails");
-					for(EmailAddress emailAddr:deleteUnsubscribe.getMessage360().getEmail().getUnsubscribed()){
-						if(!emailAddr.getDeleteStatus().toLowerCase().equals("fail"))
-							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus());
-						else
-							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus()+",Reason:="+emailAddr.getReason());
-					}
+					EmailAddress emailAddr=deleteUnsubscribe.getMessage360().getEmail().getUnsubscribedEmailAddress();
+					System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus()+",Reason:="+emailAddr.getReason());
 				}
 			}
 		} catch (M360Exception e) {
@@ -49,3 +45,4 @@ public class DeleteUnsubscribedEmail {
 		}
 	}
 }
+

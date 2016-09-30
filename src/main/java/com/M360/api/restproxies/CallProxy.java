@@ -8,7 +8,6 @@
 
 package com.M360.api.restproxies;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,33 +22,33 @@ import com.M360.api.domain.enums.AudioFormat;
 import com.M360.api.domain.enums.CallInterruptStatus;
 import com.M360.api.domain.enums.Direction;
 import com.M360.api.domain.enums.HttpMethod;
+import com.M360.api.domain.enums.IfMachineStatus;
 import com.M360.api.domain.responses.CallMessages;
 
 public interface CallProxy {
 
-	@GET
-	@Path("Calls/viewCalls/{callSid}.json")
+	@POST
+	@Path("calls/viewcalls.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> viewCall(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("callSid") String callsid
+			@QueryParam("callSid") String callsid
 			);
 	
 	@POST
-	@Path("Calls/listCalls.json")
+	@Path("calls/listcalls.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> listCalls(
 			@PathParam("AccountSid") String accountSid,
     		@QueryParam("To") String to,
     		@QueryParam("From") String from,
-    		@QueryParam("StartTime") String startTimeGte,
-    		@QueryParam("Page") Long page,
-    		@QueryParam("PageSize") Long pageSize
+    		@QueryParam("DateCreated") String DateCreated,
+    		@QueryParam("Page") Integer page,
+    		@QueryParam("PageSize") Integer pageSize
 			);
 	
 	@POST
-	//@Path("Calls/makeCall.json")//production
-	@Path("calls/makecall.json")//DEVELOPMENT
+	@Path("calls/makecall.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> makeCall(
 			@PathParam("AccountSid") String accountSid,
@@ -59,30 +58,25 @@ public interface CallProxy {
 			@QueryParam(value = "To") String to,
 			@QueryParam(value = "Url") String url,
 			@QueryParam(value = "Method") HttpMethod method,
-			@QueryParam(value = "StatusCallBack") String statusCallback,
-			@QueryParam(value = "StatusCallBackMethod") HttpMethod StatusCallbackMethod,
+			@QueryParam(value = "StatusCallBackUrl") String statusCallBackUrl,
+			@QueryParam(value = "StatusCallBackMethod") HttpMethod statusCallBackMethod,
 			@QueryParam(value = "FallBackUrl") String fallbackUrl,
 			@QueryParam(value = "FallBackMethod") HttpMethod fallbackMethod,
 			@QueryParam(value = "HeartBeatUrl") String heartbeatUrl,
 			@QueryParam(value = "HeartBeatMethod") HttpMethod heartbeatMethod,
-			@QueryParam(value = "ForwardedFrom") String forwardedFrom,
 			@QueryParam(value = "Timeout") Long timeout,
 			@QueryParam(value = "PlayDtmf") String playDtmf,
 			@QueryParam(value = "HideCallerId") Boolean HideCallerId,
 			@QueryParam(value = "Record") Boolean record,
-			@QueryParam(value = "RecordCallBack") Integer recordCallback,
+			@QueryParam(value = "RecordCallBackUrl") Integer recordCallbackUrl,
 			@QueryParam(value = "RecordCallBackMethod") HttpMethod recordCallbackMethod,
 			@QueryParam(value = "Transcribe") Boolean transcribe,
-			@QueryParam(value = "TranscribeQuality") String transcribeCallback,
-			@QueryParam(value = "StraightToVoicemail") String straightToVoicemail,
-			@QueryParam(value = "IfMachine") String ifMachine,
-			@QueryParam(value = "IfMachineUrl") String ifMachineUrl,
-			@QueryParam(value = "IfMachineMethod") String ifMachineMethod
+			@QueryParam(value = "TranscribeCallBackUrl") String transcribeCallBackUrl,
+			@QueryParam(value = "IfMachine") IfMachineStatus ifMachine
 	);
 	
 	@POST
-	@Path("Calls/interruptCalls.json")//production
-	//@Path("calls/interruptcalls.json")//development
+	@Path("calls/interruptcalls.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> interruptCall(
 			@PathParam("AccountSid") String accountSid,
@@ -93,7 +87,7 @@ public interface CallProxy {
 	);
 	
 	@POST
-	@Path("calls/sendDigits.json")
+	@Path("calls/senddigits.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> sendDigits(
 			@PathParam("AccountSid") String accountSid,
@@ -104,7 +98,7 @@ public interface CallProxy {
 	
 	
 	@POST
-	@Path("Calls/playAudios.json")
+	@Path("calls/playaudios.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> playAudio(
 			@PathParam("AccountSid") String accountSid,
@@ -112,12 +106,14 @@ public interface CallProxy {
 			@QueryParam("Mix") Boolean mix,
 			@QueryParam("Length") Long length,
 			@QueryParam("Loop") Boolean loop,
-			@QueryParam("AudioUrl") String audioUrl
+			@QueryParam("AudioUrl") String audioUrl,
+			@QueryParam("Direction") Direction direction
+			
 	);
 	
 	
 	@POST
-	@Path("Calls/voiceEffect.json")
+	@Path("calls/voiceeffect.json")
 	@Produces("application/json")
 	ClientResponse<Message360<CallMessages>> voiceEffects(
 			@PathParam("AccountSid") String accountSid,

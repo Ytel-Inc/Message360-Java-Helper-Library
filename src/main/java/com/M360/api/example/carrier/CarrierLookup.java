@@ -27,7 +27,7 @@ public class CarrierLookup {
 					}
 				}else{
 					System.out.println("CarrierLookup");
-					System.out.println("Carrier Sid:="+carrierLookup.getMessage360().getCarrier());
+					System.out.println("Carrier Sid:="+carrierLookup.getMessage360().getCarrier().getCarrierSid()+",Account Sid:="+carrierLookup.getMessage360().getCarrier().getAccountSid());
 				}
 			}
 		} catch (M360Exception e) {

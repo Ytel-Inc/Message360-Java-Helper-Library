@@ -1,7 +1,7 @@
 package com.M360.api.configuration;
 
 /**
- * The basic interface which must return the Telapi configuration parameters.
+ * The basic interface which must return the M360 configuration parameters.
  *
  */
 public interface M360Configuration {
@@ -18,7 +18,7 @@ public interface M360Configuration {
 	
 	/**
 	 * 
-	 * @return The base URL. This should be "https://api.telapi.com/" by default.
+	 * @return The base URL. This should be "https://poratal.message360.com/" by default.
 	 */
 	public String getBaseUrl();
 	

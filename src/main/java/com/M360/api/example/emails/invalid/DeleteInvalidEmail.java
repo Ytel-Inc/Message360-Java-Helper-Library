@@ -37,13 +37,8 @@ public class DeleteInvalidEmail {
 					}
 				}else{
 					System.out.println("Delete Invalid Emails");
-					for(EmailAddress deleteInvalid:deletedInvalidEmails.getMessage360().getEmail().getInvalid()){
-						if(deleteInvalid.getDeleteStatus().toLowerCase().equals("fail")){
-							System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus()+",Reason:="+deleteInvalid.getReason());	
-						}else{
-							System.out.println(1+":"+deleteInvalid.getEmail()+",Created :="+deleteInvalid.getDeleteStatus());
-						}
-					}	
+					EmailAddress deleteInvalid=deletedInvalidEmails.getMessage360().getEmail().getInvalidEmailAddress();
+					System.out.println("Deleted InValid Emails "+deleteInvalid.getEmail()+",Status :="+deleteInvalid.getDeleteStatus()+",Reason:="+deleteInvalid.getReason());	
 				}
 			}
 		} catch (M360Exception e) {
@@ -51,3 +46,9 @@ public class DeleteInvalidEmail {
 		}
 	}
 }
+
+/*
+shoaib@ytel.comin	Reason:Mail domain mentioned in email address is unknown
+shoaib@ytel.coin	Reason:Mail domain mentioned in email address is unknown
+seema+test11@ytel.coin	Reason:Mail domain mentioned in email address is unknown
+*/

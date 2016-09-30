@@ -26,12 +26,15 @@ public class NumberMessage extends Message360Exception {
 	private List<Phone> phone = null;
 	@JsonProperty(value="BuyNumber")
 	private List<Phone> buyNumber = null;
+	@JsonProperty(value="Release")
+	private Phone release = null;
 
 	public NumberMessage(){
 		super();
 		phones=new Phones();
 		phone=new ArrayList<Phone>();
 		buyNumber=new ArrayList<Phone>(); 
+		release = new Phone();
 	}
 
 	public Integer getResponseStatus() {
@@ -96,6 +99,14 @@ public class NumberMessage extends Message360Exception {
 
 	public void setBuyNumber(List<Phone> buyNumber) {
 		this.buyNumber = buyNumber;
+	}
+
+	public Phone getRelease() {
+		return release;
+	}
+
+	public void setRelease(Phone release) {
+		this.release = release;
 	}
 	
 	

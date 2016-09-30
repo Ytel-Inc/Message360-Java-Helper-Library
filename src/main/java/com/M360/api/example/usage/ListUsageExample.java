@@ -24,12 +24,11 @@ public class ListUsageExample {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			
 			if(M360Constants.JSONFORMAT){
-				String listJsonUsage=conn.listJsonUsage(ProductType.OUTBOUND_CALL,null,null);
+				String listJsonUsage=conn.listJsonUsage(ProductType.ALL,null,null);
 				System.out.println(listJsonUsage);
 			}else{
-				Message360<UsageMessage> listUsageExample = conn.listUsage(ProductType.OUTBOUND_CALL, null, null);
+				Message360<UsageMessage> listUsageExample = conn.listUsage(ProductType.ALL, null, null);
 				if(listUsageExample.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<listUsageExample.getMessage360().getErrors().getError().size();x++){
 						Error error=listUsageExample.getMessage360().getErrors().getError().get(x);

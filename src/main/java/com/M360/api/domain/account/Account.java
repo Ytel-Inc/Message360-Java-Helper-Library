@@ -21,20 +21,30 @@ public class Account extends BaseMessage360Object{
 	private Integer checks =null;
 	@JsonProperty(value="Jobs")
 	private Integer jobs =null;
-	@JsonProperty(value="Letters")
+	@JsonProperty(value="Letter")
 	private Integer letters =null;
 	@JsonProperty(value="Objects")
 	private Integer objects =null;
-	@JsonProperty(value="Postcard")
+	@JsonProperty(value="PostCard")
 	private Integer postcard =null;
 	@JsonProperty(value="Transcriptions")
 	private Long transcriptions =null;
 	@JsonProperty(value="TimeZone")
 	private String timeZone =null;
+	@JsonProperty(value="OptinSMS")
+	private Integer optinSMS =null;
+	@JsonProperty(value="CarrierLookUp")
+	private Integer carrierLookUp =null;
+	@JsonProperty(value="NumberPurchased")
+	private Integer numberPurchased =null;
+	@JsonProperty(value="VerifiedAddresses")
+	private Integer verifiedAddresses =null;
+	@JsonProperty(value="Conference")
+	private Integer conference =null;
 	
-	
-	
-	
+	public Account(){
+		
+	}
 	public String getAccountBalance() {
 		return accountBalance;
 	}
@@ -112,6 +122,36 @@ public class Account extends BaseMessage360Object{
 	}
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+	public Integer getOptinSMS() {
+		return optinSMS;
+	}
+	public void setOptinSMS(Integer optinSMS) {
+		this.optinSMS = optinSMS;
+	}
+	public Integer getCarrierLookUp() {
+		return carrierLookUp;
+	}
+	public void setCarrierLookUp(Integer carrierLookUp) {
+		this.carrierLookUp = carrierLookUp;
+	}
+	public Integer getConference() {
+		return conference;
+	}
+	public void setConference(Integer conference) {
+		this.conference = conference;
+	}
+	public Integer getNumberPurchased() {
+		return numberPurchased;
+	}
+	public void setNumberPurchased(Integer numberPurchased) {
+		this.numberPurchased = numberPurchased;
+	}
+	public Integer getVerifiedAddresses() {
+		return verifiedAddresses;
+	}
+	public void setVerifiedAddresses(Integer verifiedAddresses) {
+		this.verifiedAddresses = verifiedAddresses;
 	}
 	
 }

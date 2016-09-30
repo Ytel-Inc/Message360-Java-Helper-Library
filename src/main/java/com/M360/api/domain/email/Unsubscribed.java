@@ -7,20 +7,31 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Unsubscribed {
 	
+	@JsonProperty(value="UnsubscribedEmailAddresses")
+	private List<EmailAddress> unsubscribedEmailAddresses=null;
 	@JsonProperty(value="UnsubscribedEmailAddress")
-	private List<EmailAddress> unsubscribed=null;
+	private EmailAddress unsubscribedEmailAddress=null;
 	
 	public Unsubscribed(){
 		super();
-		unsubscribed =new ArrayList<EmailAddress>();
+		unsubscribedEmailAddresses =new ArrayList<EmailAddress>();
+		unsubscribedEmailAddress =new EmailAddress();
 	}
 
-	public List<EmailAddress> getUnsubscribed() {
-		return unsubscribed;
+	public List<EmailAddress> getUnsubscribedEmailAddresses() {
+		return unsubscribedEmailAddresses;
 	}
 
-	public void setUnsubscribed(List<EmailAddress> unsubscribed) {
-		this.unsubscribed = unsubscribed;
+	public void setUnsubscribedEmailAddresses(List<EmailAddress> unsubscribedEmailAddresses) {
+		this.unsubscribedEmailAddresses = unsubscribedEmailAddresses;
 	}
-	
+
+	public EmailAddress getUnsubscribedEmailAddress() {
+		return unsubscribedEmailAddress;
+	}
+
+	public void setUnsubscribedEmailAddress(EmailAddress unsubscribedEmailAddress) {
+		this.unsubscribedEmailAddress = unsubscribedEmailAddress;
+	}
+
 }

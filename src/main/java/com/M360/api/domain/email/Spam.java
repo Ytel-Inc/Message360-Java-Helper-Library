@@ -6,19 +6,33 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Spam {
+	
+	@JsonProperty(value="SpamReports")
+	private List<EmailAddress> spamReports=null;
 	@JsonProperty(value="SpamReport")
-	private List<EmailAddress> spam=null;//for listUnsubscribe
+	private EmailAddress spamReport=null;
 	
 	public Spam(){
 		super();
-		spam =new ArrayList<EmailAddress>();
+		spamReports = new ArrayList<EmailAddress>();
+		spamReport = new EmailAddress();
 	}
 
-	public List<EmailAddress> getSpam() {
-		return spam;
+	public List<EmailAddress> getSpamReports() {
+		return spamReports;
 	}
 
-	public void setSpam(List<EmailAddress> spam) {
-		this.spam = spam;
+	public void setSpamReports(List<EmailAddress> spamReports) {
+		this.spamReports = spamReports;
 	}
+
+	public EmailAddress getSpamReport() {
+		return spamReport;
+	}
+
+	public void setSpamReport(EmailAddress spamReport) {
+		this.spamReport = spamReport;
+	}
+
+	
 }

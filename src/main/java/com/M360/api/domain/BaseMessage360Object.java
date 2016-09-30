@@ -44,7 +44,14 @@ public class BaseMessage360Object {
 	private String from=null;
 	@JsonProperty(value="To")
 	private String to=null;
-	
+	@JsonDeserialize(using = JsonDateParser.class)
+	@JsonProperty(value="StartDate")
+	private Date startDate=null;
+	@JsonDeserialize(using = JsonDateParser.class)
+	@JsonProperty(value="EndDate")
+	private Date endDate=null;
+	@JsonProperty(value="State")
+	private String state=null;
 	
 	/**
 	 * 
@@ -103,7 +110,7 @@ public class BaseMessage360Object {
 	
 	/**
 	 * 
-	 * @return The path appended to the base TelAPI URL, https://api.telapi.com,
+	 * @return The path appended to the base M360 URL, https://portal.message360.com,
 	 *         where the resource is located.
 	 */
 	public String getUri() {
@@ -158,6 +165,26 @@ public class BaseMessage360Object {
 	}
 	public void setTo(String to) {
 		this.to = to;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 }

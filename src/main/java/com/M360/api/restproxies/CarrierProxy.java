@@ -9,7 +9,6 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.client.ClientResponse;
 
 import com.M360.api.domain.Message360;
-import com.M360.api.domain.responses.CallMessages;
 import com.M360.api.domain.responses.CarrierMessage;
 
 public interface CarrierProxy {
@@ -27,7 +26,7 @@ public interface CarrierProxy {
 	@Produces("application/json")
 	ClientResponse<Message360<CarrierMessage>> carrierLookupList(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("page") Long page,
-			@QueryParam("pageSize") Long pageSize
+			@QueryParam("page") Integer page,
+			@QueryParam("pageSize") Integer pageSize
 			);
 }

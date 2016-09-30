@@ -8,10 +8,13 @@ public class Usage extends BaseMessage360Object{
 	@JsonProperty(value="Product")
 	private String product=null;
 	@JsonProperty(value="TotalCost")
-	private Double totalCost=null;
+	private String totalCost=null;
 	@JsonProperty(value="Total")
 	private Integer total=null;
 	
+	public Usage(){
+		
+	}
 	
 	public String getProduct() {
 		return product;
@@ -19,10 +22,10 @@ public class Usage extends BaseMessage360Object{
 	public void setProduct(String product) {
 		this.product = product;
 	}
-	public Double getTotalCost() {
+	public String getTotalCost() {
 		return totalCost;
 	}
-	public void setTotalCost(Double totalCost) {
+	public void setTotalCost(String totalCost) {
 		this.totalCost = totalCost;
 	}
 	public Integer getTotal() {

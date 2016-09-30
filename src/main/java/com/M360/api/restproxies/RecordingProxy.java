@@ -8,11 +8,13 @@
 
 package com.M360.api.restproxies;
 
-import javax.ws.rs.GET;
+
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import org.jboss.resteasy.client.ClientResponse;
 
@@ -21,26 +23,30 @@ import com.M360.api.domain.responses.RecordMessage;
 
 public interface RecordingProxy {
 	
-	@GET
-	@Path("recording/viewrecording/{RecordingId}.json")
+	@POST
+	@Path("recording/viewrecording.json")
 	@Produces("application/json")
 	ClientResponse<Message360<RecordMessage>> viewRecording(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("RecordingId") String recordingSid
+			@QueryParam("recordingsid") String recordingSid
 			);
 	
 	@POST
 	@Path("recording/listrecording.json")
 	@Produces("application/json")
 	ClientResponse<Message360<RecordMessage>> listRecording(
-			@PathParam("AccountSid") String accountSid
+			@PathParam("AccountSid") String accountSid,
+			@QueryParam("page") Integer page,
+			@QueryParam("pagesize") Integer pagesize,
+			@QueryParam("callsid") String callsid,
+			@QueryParam("Datecreated") String dateCreated
 			);
 	
-	@POST
-	@Path("recording/deleterecording/{RecordingId}.json")
+	@DELETE
+	@Path("recording/deleterecording.json")
 	@Produces("application/json")
 	ClientResponse<Message360<RecordMessage>> deleteRecording(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("RecordingId") String recordingSid
+			@QueryParam("recordingsid") String recordingSid
 			);
 }

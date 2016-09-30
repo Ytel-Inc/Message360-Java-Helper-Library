@@ -1,6 +1,7 @@
 package com.M360.api.requests;
 
 import com.M360.api.domain.enums.HttpMethod;
+import com.M360.api.domain.enums.IfMachineStatus;
 
 public class CallRequest {
 	
@@ -11,25 +12,21 @@ public class CallRequest {
 	private String to = null;
 	private String url = null;
 	private HttpMethod method = null;
-	private String statusCallback = null;
+	private String statusCallbackUrl = null;
 	private HttpMethod StatusCallbackMethod = null;
 	private String fallbackUrl = null;
-	private HttpMethod fallbackMethod = null;
+	private HttpMethod fallbackUrlMethod = null;
 	private String heartbeatUrl = null;
 	private HttpMethod heartbeatMethod = null;
-	private String forwardedFrom = null;
 	private Long timeout = null;
 	private String playDtmf = null;
 	private Boolean hideCallerId = null;
 	private Boolean record = null;
-	private Integer recordCallback = null;
+	private Integer recordCallbackUrl = null;
 	private HttpMethod recordCallbackMethod = null;
 	private Boolean transcribe = null;
-	private String transcribeQuality = null;
-	private String straightToVoicemail = null;
-	private String ifMachine = null;
-	private String ifMachineUrl = null;
-	private String ifMachineMethod = null;
+	private String transcribeCallbackUrl = null;
+	private IfMachineStatus ifMachine = null;
 	
 	
 	public String getAccountSid() {
@@ -74,11 +71,11 @@ public class CallRequest {
 	public void setMethod(HttpMethod method) {
 		this.method = method;
 	}
-	public String getStatusCallback() {
-		return statusCallback;
+	public String getStatusCallbackUrl() {
+		return statusCallbackUrl;
 	}
-	public void setStatusCallback(String statusCallback) {
-		this.statusCallback = statusCallback;
+	public void setStatusCallbackUrl(String statusCallbackUrl) {
+		this.statusCallbackUrl = statusCallbackUrl;
 	}
 	public HttpMethod getStatusCallbackMethod() {
 		return StatusCallbackMethod;
@@ -92,11 +89,11 @@ public class CallRequest {
 	public void setFallbackUrl(String fallbackUrl) {
 		this.fallbackUrl = fallbackUrl;
 	}
-	public HttpMethod getFallbackMethod() {
-		return fallbackMethod;
+	public HttpMethod getFallbackUrlMethod() {
+		return fallbackUrlMethod;
 	}
-	public void setFallbackMethod(HttpMethod fallbackMethod) {
-		this.fallbackMethod = fallbackMethod;
+	public void setFallbackUrlMethod(HttpMethod fallbackUrlMethod) {
+		this.fallbackUrlMethod = fallbackUrlMethod;
 	}
 	public String getHeartbeatUrl() {
 		return heartbeatUrl;
@@ -110,12 +107,7 @@ public class CallRequest {
 	public void setHeartbeatMethod(HttpMethod heartbeatMethod) {
 		this.heartbeatMethod = heartbeatMethod;
 	}
-	public String getForwardedFrom() {
-		return forwardedFrom;
-	}
-	public void setForwardedFrom(String forwardedFrom) {
-		this.forwardedFrom = forwardedFrom;
-	}
+	
 	public Long getTimeout() {
 		return timeout;
 	}
@@ -140,11 +132,11 @@ public class CallRequest {
 	public void setRecord(Boolean record) {
 		this.record = record;
 	}
-	public Integer getRecordCallback() {
-		return recordCallback;
+	public Integer getRecordCallbackUrl() {
+		return recordCallbackUrl;
 	}
-	public void setRecordCallback(Integer recordCallback) {
-		this.recordCallback = recordCallback;
+	public void setRecordCallbackUrl(Integer recordCallbackUrl) {
+		this.recordCallbackUrl = recordCallbackUrl;
 	}
 	public HttpMethod getRecordCallbackMethod() {
 		return recordCallbackMethod;
@@ -158,37 +150,18 @@ public class CallRequest {
 	public void setTranscribe(Boolean transcribe) {
 		this.transcribe = transcribe;
 	}
-	public String getTranscribeQuality() {
-		return transcribeQuality;
+	public String getTranscribeCallbackUrl() {
+		return transcribeCallbackUrl;
 	}
-	public void setTranscribeQuality(String transcribeQuality) {
-		this.transcribeQuality = transcribeQuality;
+	public void setTranscribeCallbackUrl(String transcribeCallbackUrl) {
+		this.transcribeCallbackUrl = transcribeCallbackUrl;
 	}
-	public String getStraightToVoicemail() {
-		return straightToVoicemail;
-	}
-	public void setStraightToVoicemail(String straightToVoicemail) {
-		this.straightToVoicemail = straightToVoicemail;
-	}
-	public String getIfMachine() {
+	public IfMachineStatus getIfMachine() {
 		return ifMachine;
 	}
-	public void setIfMachine(String ifMachine) {
+	public void setIfMachine(IfMachineStatus ifMachine) {
 		this.ifMachine = ifMachine;
 	}
-	public String getIfMachineUrl() {
-		return ifMachineUrl;
-	}
-	public void setIfMachineUrl(String ifMachineUrl) {
-		this.ifMachineUrl = ifMachineUrl;
-	}
-	public String getIfMachineMethod() {
-		return ifMachineMethod;
-	}
-	public void setIfMachineMethod(String ifMachineMethod) {
-		this.ifMachineMethod = ifMachineMethod;
-	}
-	
 	
 
 }

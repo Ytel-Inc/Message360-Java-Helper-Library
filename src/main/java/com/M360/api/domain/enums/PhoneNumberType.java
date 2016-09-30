@@ -8,13 +8,14 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import com.M360.api.domain.enums.util.EnumUtil;
 
 public enum PhoneNumberType {
-	VOICE, ALL;
+	VOICE, SMS,ALL;
 	
 	private static Map<PhoneNumberType, String> map;
 	
 	static {
 		map = new HashMap<PhoneNumberType, String>();
 		map.put(VOICE, "voice");
+		map.put(SMS, "sms");
 		map.put(ALL, "all");
 	}
 	

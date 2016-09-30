@@ -36,12 +36,8 @@ public class DeleteSpamEmail {
 					}
 				}else{
 					System.out.println("Delete of Spam Emails");
-					for(EmailAddress emailAddr:deleteSpam.getMessage360().getEmail().getSpam()){
-						if(!emailAddr.getDeleteStatus().toLowerCase().equals("fail"))
-							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus());
-						else
-							System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus()+",Reason:="+emailAddr.getReason());
-					}
+					EmailAddress emailAddr = deleteSpam.getMessage360().getEmail().getSpamReport();
+					System.out.println(emailAddr.getEmail()+",Delete Status:="+emailAddr.getDeleteStatus());
 				}
 			}
 		} catch (M360Exception e) {

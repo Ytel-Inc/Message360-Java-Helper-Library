@@ -10,6 +10,7 @@ package com.M360.api;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -27,6 +28,10 @@ import com.M360.api.domain.responses.AccountMessage;
 import com.M360.api.domain.responses.CallMessages;
 import com.M360.api.domain.responses.CarrierMessage;
 import com.M360.api.domain.responses.ConferenceMessages;
+import com.M360.api.domain.directmail.responses.DMAddressBook;
+import com.M360.api.domain.directmail.responses.DMAreaMail;
+import com.M360.api.domain.directmail.responses.DMLetter;
+import com.M360.api.domain.directmail.responses.DMPostCard;
 import com.M360.api.domain.responses.Message360Email;
 import com.M360.api.domain.responses.NumberMessage;
 import com.M360.api.domain.responses.RecordMessage;
@@ -41,9 +46,13 @@ import com.M360.api.domain.enums.AudioFormat;
 import com.M360.api.domain.enums.CallInterruptStatus;
 import com.M360.api.domain.enums.ConferenceStatus;
 import com.M360.api.domain.enums.Direction;
+import com.M360.api.domain.enums.EmailSendAs;
+import com.M360.api.domain.enums.ExtraService;
 import com.M360.api.domain.enums.HttpMethod;
+import com.M360.api.domain.enums.IfMachineStatus;
 import com.M360.api.domain.enums.PhoneNumberType;
 import com.M360.api.domain.enums.ProductType;
+import com.M360.api.domain.enums.TargetType;
 import com.M360.api.domain.enums.TranscriptionStatus;
 import com.M360.api.exception.M360Exception;
 import com.M360.api.http.RestExecutor;
@@ -53,6 +62,10 @@ import com.M360.api.restproxies.AccountsProxy;
 import com.M360.api.restproxies.CallProxy;
 import com.M360.api.restproxies.CarrierProxy;
 import com.M360.api.restproxies.ConferenceProxy;
+import com.M360.api.restproxies.DM_AddressBookProxy;
+import com.M360.api.restproxies.DM_AreaMailProxy;
+import com.M360.api.restproxies.DM_LetterProxy;
+import com.M360.api.restproxies.DM_PostCardProxy;
 import com.M360.api.restproxies.EmailProxy;
 import com.M360.api.restproxies.PhoneProxy;
 import com.M360.api.restproxies.RecordingProxy;
@@ -62,6 +75,11 @@ import com.M360.api.restproxies.UsageProxy;
 
 
 
+
+/**
+ * @author xoyal
+ *
+ */
 public class Message360Connector {
 
 	private ApacheHttpClient4Executor executor;
@@ -77,7 +95,11 @@ public class Message360Connector {
 	private ConferenceProxy conferenceProxy;
 	private EmailProxy emailProxy;
 	private CarrierProxy carrierProxy;
-	
+	private DM_AddressBookProxy addressBookProxy;
+	private DM_PostCardProxy postCardProxy;
+	private DM_LetterProxy letterProxy;
+	private DM_AreaMailProxy areaMailProxy;
+		
 
 	/**
 	 * Creates a new M360Connector based on the provided configuration.
@@ -92,6 +114,7 @@ public class Message360Connector {
 		this.conf = conf;
 		executor = RestExecutor.createExecutor(conf);
 		URI baseUrl = UriBuilder.fromUri(conf.getBaseUrl()).path(M360Constants.API_VERSION).build();
+		System.out.println("URL:"+baseUrl);
 		fullBaseUrl = baseUrl.toString();
 		callProxy = createProxy(CallProxy.class);
 		smsProxy = createProxy(SmsProxy.class);
@@ -103,6 +126,30 @@ public class Message360Connector {
 		conferenceProxy = createProxy(ConferenceProxy.class);
 		emailProxy = createProxy(EmailProxy.class);
 		carrierProxy = createProxy(CarrierProxy.class);
+		addressBookProxy = createProxy(DM_AddressBookProxy.class);
+		postCardProxy = createProxy(DM_PostCardProxy.class);
+		letterProxy = createProxy(DM_LetterProxy.class);
+	}
+	
+	public Message360Connector(M360Configuration conf,String directMail) {
+		this.conf = conf;
+		executor = RestExecutor.createExecutor(conf);
+		URI baseUrl = UriBuilder.fromUri(conf.getBaseUrl()).path(directMail+"/"+M360Constants.API_VERSION).build();
+		System.out.println("URL:"+baseUrl);
+		fullBaseUrl = baseUrl.toString();
+		callProxy = createProxy(CallProxy.class);
+		smsProxy = createProxy(SmsProxy.class);
+		transcriptionProxy = createProxy(TranscriptionProxy.class);
+		phoneProxy = createProxy(PhoneProxy.class);
+		recordingProxy =createProxy(RecordingProxy.class);
+		accountsProxy = createProxy(AccountsProxy.class);
+		usageProxy =createProxy(UsageProxy.class);
+		conferenceProxy = createProxy(ConferenceProxy.class);
+		emailProxy = createProxy(EmailProxy.class);
+		carrierProxy = createProxy(CarrierProxy.class);
+		addressBookProxy = createProxy(DM_AddressBookProxy.class);
+		postCardProxy = createProxy(DM_PostCardProxy.class);
+		letterProxy = createProxy(DM_LetterProxy.class);
 	}
 
 	private <T> T createProxy(Class<T> clazz) {
@@ -140,20 +187,20 @@ public class Message360Connector {
 	 */
 	
 	//define all functions here 
-	public Message360<AccountMessage> viewAccount(String accountSid) throws M360Exception {
-		ClientResponse<Message360<AccountMessage>> acc = accountsProxy.getAccount(accountSid);
+	public Message360<AccountMessage> viewAccount(String accountSid,String date) throws M360Exception {
+		ClientResponse<Message360<AccountMessage>> acc = accountsProxy.getAccount(accountSid,date);
 		return returnThrows(acc);
 	}
 	
-	public Message360<AccountMessage> viewAccount() throws M360Exception {
-		return viewAccount(conf.getSid());
+	public Message360<AccountMessage> viewAccount(String date) throws M360Exception {
+		return viewAccount(conf.getSid(),date);
 	}
 	
-	public String viewJsonAccount() throws M360Exception {
-		return accountsProxy.getAccount(conf.getSid()).getEntity(String.class);
+	public String viewJsonAccount(String date) throws M360Exception {
+		return accountsProxy.getAccount(conf.getSid(),date).getEntity(String.class);
 	}
 
-	//////////////
+	/////////////
 	/////Usage
 	/////////////
 	
@@ -167,20 +214,20 @@ public class Message360Connector {
 	 * @throws M360Exception
 	 */
 		
-	public Message360<UsageMessage> listUsage(String accountSid,ProductType product,Date to,Date from) throws M360Exception {
-		ClientResponse<Message360<UsageMessage>> acc = usageProxy.listUsage(accountSid,product,getDateString(to),getDateString(from));
+	public Message360<UsageMessage> listUsage(String accountSid,ProductType product,String to,String from) throws M360Exception {
+		ClientResponse<Message360<UsageMessage>> acc = usageProxy.listUsage(accountSid,product,to,from);
 		return returnThrows(acc);
 	}
 
-	public Message360<UsageMessage> listUsage(ProductType product,Date to,Date from) throws M360Exception {
+	public Message360<UsageMessage> listUsage(ProductType product,String to,String from) throws M360Exception {
 		return listUsage(conf.getSid(),product,to,from);
 	}
 	public Message360<UsageMessage> listUsage() throws M360Exception {
 		return listUsage(conf.getSid(),ProductType.ALL,null,null);
 	}
 		
-	public String listJsonUsage(ProductType product,Date to,Date from) throws M360Exception {
-		return usageProxy.listUsage(conf.getSid(),product,getDateString(to),getDateString(from)).getEntity(String.class);
+	public String listJsonUsage(ProductType product,String to,String from) throws M360Exception {
+		return usageProxy.listUsage(conf.getSid(),product,to,from).getEntity(String.class);
 	}
 	
 	public String listJsonUsage() throws M360Exception {
@@ -233,27 +280,26 @@ public class Message360Connector {
 	* @throws M360Exception
 	*/
 	public Message360<SMSMessages> listSmsMessages(String accountSid, String to,
-		String from, Date dateSentGte, Date dateSentLt, Long page,
-		Long pageSize) throws M360Exception {
+		String from,  String dateSentGte,  Integer page,
+		Integer pageSize) throws M360Exception {
 	
 	ClientResponse<Message360<SMSMessages>> smsList = smsProxy.getSmsMessageList(
-			accountSid, to, from, getDateString(dateSentGte),
-			getDateString(dateSentLt), page, pageSize);
+			accountSid, to, from, dateSentGte, page, pageSize);
 		return returnThrows(smsList);
 	}
 	
 	public Message360<SMSMessages> listSmsMessages(String to, String from,
-		Date dateSentGte, Date dateSentLt, Long page, Long pageSize) throws M360Exception {
+			String dateSentGte,  Integer page, Integer pageSize) throws M360Exception {
 		return listSmsMessages(conf.getSid(), to, from, dateSentGte,
-			dateSentLt, page, pageSize);
+			 page, pageSize);
 	}
 	
 	public Message360<SMSMessages> listSmsMessages() throws M360Exception {
-		return listSmsMessages(conf.getSid(), null, null, null, null, null,null);
+		return listSmsMessages(conf.getSid(), null, null, null,  null,null);
 	}
 	
 	public String listJsonSmsMessages() throws M360Exception {
-		return smsProxy.getSmsMessageList(conf.getSid(), null, null, null, null, null,null).getEntity(String.class);
+		return smsProxy.getSmsMessageList(conf.getSid(), null, null, null,  null,null).getEntity(String.class);
 	}
 	
 	
@@ -303,54 +349,25 @@ public class Message360Connector {
 	* @throws M360Exception
 	*/
 	
-	public Message360<SMSMessages> getInboundSMS(String accountSid,String to, String from,Date dateReceived,Long page,Long pageSize) throws M360Exception {
+	public Message360<SMSMessages> getInboundSMS(String accountSid,String to, String from,String dateReceived,Integer page,Integer pageSize) throws M360Exception {
 	 ClientResponse<Message360<SMSMessages>> smsMessage = smsProxy.getInboundSms(accountSid, to, from,dateReceived, page,pageSize);
 	 return returnThrows(smsMessage);
 	}
 	
-	public Message360<SMSMessages> getInboundSMS(String to, String from,Date dateReceived, Long page,Long pageSize) throws M360Exception {
+	public Message360<SMSMessages> getInboundSMS(String to, String from,String dateReceived, Integer page,Integer pageSize) throws M360Exception {
 		return getInboundSMS(conf.getSid(), to, from,dateReceived,page,pageSize);
 	}
 	public Message360<SMSMessages> getInboundSMS() throws M360Exception {
-		return getInboundSMS(conf.getSid(),null,null,null,null);
+		return getInboundSMS(null,null,null,null,null);
 	}
 	
-	public String getJsonInboundSMS(String to, String from,Date dateReceived, Long page,Long pageSize) throws M360Exception {
+	public String getJsonInboundSMS(String to, String from,String dateReceived, Integer page, Integer pageSize) throws M360Exception {
 	return smsProxy.getInboundSms(conf.getSid(), to, from,dateReceived,page,pageSize).getEntity(String.class);
 	}
 	public String getJsonInboundSMS() throws M360Exception {
 		return smsProxy.getInboundSms(conf.getSid(), null,null,null,null,null).getEntity(String.class);
 	}
 	
-	/** @see  OptIns
-	*  Send SMS to TollFree Number . 
-	* @param accountSid
-	* @param to
-	* @param from
-	* @param fromCountryCode
-	* @param toCountryCode
-	* @param expires
-	* @param authorizedby
-	* @param authorizedhow
-	* @return
-	* @throws M360Exception
-	*/
-	
-	
-	public Message360<SMSMessages> getNumberOptins(String accountSid,String to, String from,Integer fromCountryCode,Integer toCountryCode,
-		Integer expires,String authorizedby,String authorizedhow) throws M360Exception {
-	 ClientResponse<Message360<SMSMessages>> smsMessage = smsProxy.getNumberOptins(
-			accountSid, to, from, fromCountryCode,toCountryCode,  expires,authorizedby,authorizedhow);
-	 return returnThrows(smsMessage);
-	}
-	
-	public Message360<SMSMessages> getNumberOptins(String to, String from, Integer fromCountryCode,Integer toCountryCode,Integer expires,String authorizedby,String authorizedhow) throws M360Exception {
-		return getNumberOptins(conf.getSid(), to, from,fromCountryCode,toCountryCode, expires,authorizedby,authorizedhow);
-	}
-	
-	public String getJsonNumberOptins(String to, String from, Integer fromCountryCode,Integer toCountryCode,Integer expires,String authorizedby,String authorizedhow) throws M360Exception {
-		return smsProxy.getNumberOptins(conf.getSid(), to, from,fromCountryCode,toCountryCode, expires,authorizedby,authorizedhow).getEntity(String.class);
-	}
 	
 
 	//////////////////////
@@ -392,8 +409,8 @@ public class Message360Connector {
 	*            The account sid (required).
 	* @throws M360Exception
 	*/
-	public Message360<CallMessages> listCalls(String accountSid, String to, String from,Date startTimeGte, Long page,Long pageSize) throws M360Exception {
-		return returnThrows(callProxy.listCalls(accountSid, to, from,getDateString(startTimeGte), page,pageSize));
+	public Message360<CallMessages> listCalls(String accountSid, String to, String from,String startTimeGte, Integer page,Integer pageSize) throws M360Exception {
+		return returnThrows(callProxy.listCalls(accountSid, to, from,startTimeGte, page,pageSize));
 	}
 	
 	/**@see listCalls
@@ -418,7 +435,7 @@ public class Message360Connector {
 	* @return A list of calls.
 	* @throws M360Exception
 	*/
-	public Message360<CallMessages> listCalls(String to, String from,Date startTimeGte, Long page, Long pageSize)throws M360Exception {
+	public Message360<CallMessages> listCalls(String to, String from,String startTimeGte, Integer page, Integer pageSize)throws M360Exception {
 		return listCalls(conf.getSid(), to, from, startTimeGte,page, pageSize);
 	}
 	
@@ -426,8 +443,8 @@ public class Message360Connector {
 		return listCalls(conf.getSid(), null, null, null,null, null);
 	}
 	
-	public String  listJsonCalls(String to, String from,Date startTimeGte, Long page, Long pageSize)throws M360Exception {
-		return callProxy.listCalls(conf.getSid(), to, from, getDateString(startTimeGte),page, pageSize).getEntity(String.class);
+	public String  listJsonCalls(String to, String from,String dateCreated, Integer page, Integer pageSize)throws M360Exception {
+		return callProxy.listCalls(conf.getSid(), to, from, dateCreated,page, pageSize).getEntity(String.class);
 	}
 	
 	public String  listJsonCalls() throws M360Exception {
@@ -444,30 +461,30 @@ public class Message360Connector {
 	
 	public Message360<CallMessages> makeCall(String accountsid,Integer fromCountryCode,String from,
 			Integer toCountryCode,String to,String url,HttpMethod method,
-			String statusCallBack,HttpMethod statusCallbackMethod,String fallBackUrl,HttpMethod fallBackMethod,
-			String heartBeatUrl,HttpMethod heartBeatMethod,String forwardedForm,Long timeout,String playDtmf,Boolean hideCallerId,
-			Boolean record,Integer recordcallBack,HttpMethod recordCallBackMethod,Boolean transcribe,String transcribeQuality,
-			String straightToVoiceMail,String ifMachine,String ifMachineURl,String ifMachineMethod)throws M360Exception {
+			String statusCallBackUrl,HttpMethod statusCallbackMethod,String fallBackUrl,HttpMethod fallBackUrlMethod,
+			String heartBeatUrl,HttpMethod heartBeatMethod,Long timeout,String playDtmf,Boolean hideCallerId,
+			Boolean record,Integer recordcallBackUrl,HttpMethod recordCallBackMethod,Boolean transcribe,String transcribeCallbackUrl,
+			IfMachineStatus ifmachine)throws M360Exception {
 		
 		return returnThrows(callProxy.makeCall(accountsid,fromCountryCode,from,toCountryCode,to,url,method,
-				statusCallBack,statusCallbackMethod,fallBackUrl,fallBackMethod,heartBeatUrl,heartBeatMethod,
-				forwardedForm,timeout,playDtmf,hideCallerId,record,recordcallBack,recordCallBackMethod,transcribe,transcribeQuality,
-				straightToVoiceMail,ifMachine,ifMachineURl,ifMachineMethod));
+				statusCallBackUrl,statusCallbackMethod,fallBackUrl,fallBackUrlMethod,heartBeatUrl,heartBeatMethod,
+				timeout,playDtmf,hideCallerId,record,recordcallBackUrl,recordCallBackMethod,transcribe,transcribeCallbackUrl,
+				ifmachine));
 	}
 	
 	
 	
 	public Message360<CallMessages> makeCall(Integer fromCountryCode,String from,
 			Integer toCountryCode,String to,String url,HttpMethod method,
-			String statusCallBack,HttpMethod statusCallbackMethod,String fallBackUrl,HttpMethod fallBackMethod,
-			String heartBeatUrl,HttpMethod heartBeatMethod,String forwardedForm,Long timeout,String playDtmf,Boolean hideCallerId,
-			Boolean record,Integer recordcallBack,HttpMethod recordCallBackMethod,Boolean transcribe,String transcribeQuality,
-			String straightToVoiceMail,String ifMachine,String ifMachineURl,String ifMachineMethod) throws M360Exception {
+			String statusCallBackUrl,HttpMethod statusCallbackMethod,String fallBackUrl,HttpMethod fallBackUrlMethod,
+			String heartBeatUrl,HttpMethod heartBeatMethod,Long timeout,String playDtmf,Boolean hideCallerId,
+			Boolean record,Integer recordcallBackUrl,HttpMethod recordCallBackMethod,Boolean transcribe,String transcribeCallbackUrl,
+			IfMachineStatus ifmachine) throws M360Exception {
 		
 		return makeCall(conf.getSid(), fromCountryCode,from,toCountryCode,to,url,method,
-				statusCallBack,statusCallbackMethod,fallBackUrl,fallBackMethod,heartBeatUrl,heartBeatMethod,
-				forwardedForm,timeout,playDtmf,hideCallerId,record,recordcallBack,recordCallBackMethod,transcribe,transcribeQuality,
-				straightToVoiceMail,ifMachine,ifMachineURl,ifMachineMethod);
+				statusCallBackUrl,statusCallbackMethod,fallBackUrl,fallBackUrlMethod,heartBeatUrl,heartBeatMethod,
+				timeout,playDtmf,hideCallerId,record,recordcallBackUrl,recordCallBackMethod,transcribe,transcribeCallbackUrl,
+				ifmachine);
 	}
 	
 	/**
@@ -541,20 +558,20 @@ public class Message360Connector {
 		String accountSid = conf.getSid();
 		if (cr.getAccountSid() != null)
 			accountSid = cr.getAccountSid();
-		return makeCall(accountSid, cr.getFromCountryCode(),cr.getFrom(),cr.getToCountryCode(),cr.getTo(),cr.getUrl(),cr.getMethod(),cr.getStatusCallback(),
-				cr.getStatusCallbackMethod(),cr.getFallbackUrl(),cr.getFallbackMethod(),cr.getHeartbeatUrl(),cr.getHeartbeatMethod(),cr.getForwardedFrom(),
-				cr.getTimeout(),cr.getPlayDtmf(),cr.getHideCallerId(),cr.getRecord(),cr.getRecordCallback(),cr.getRecordCallbackMethod(),cr.getTranscribe(),
-				cr.getTranscribeQuality(),cr.getStraightToVoicemail(),cr.getIfMachine(),cr.getIfMachineUrl(),cr.getIfMachineMethod());
+		return makeCall(accountSid, cr.getFromCountryCode(),cr.getFrom(),cr.getToCountryCode(),cr.getTo(),cr.getUrl(),cr.getMethod(),cr.getStatusCallbackUrl(),
+				cr.getStatusCallbackMethod(),cr.getFallbackUrl(),cr.getFallbackUrlMethod(),cr.getHeartbeatUrl(),cr.getHeartbeatMethod(),
+				cr.getTimeout(),cr.getPlayDtmf(),cr.getHideCallerId(),cr.getRecord(),cr.getRecordCallbackUrl(),cr.getRecordCallbackMethod(),cr.getTranscribe(),
+				cr.getTranscribeCallbackUrl(),cr.getIfMachine());
 	}
 	
 	public String makeJsonCall(CallRequest cr) throws M360Exception {
 		String accountSid = conf.getSid();
 		if (cr.getAccountSid() != null)
 			accountSid = cr.getAccountSid();
-		return callProxy.makeCall(accountSid, cr.getFromCountryCode(),cr.getFrom(),cr.getToCountryCode(),cr.getTo(),cr.getUrl(),cr.getMethod(),cr.getStatusCallback(),
-				cr.getStatusCallbackMethod(),cr.getFallbackUrl(),cr.getFallbackMethod(),cr.getHeartbeatUrl(),cr.getHeartbeatMethod(),cr.getForwardedFrom(),
-				cr.getTimeout(),cr.getPlayDtmf(),cr.getHideCallerId(),cr.getRecord(),cr.getRecordCallback(),cr.getRecordCallbackMethod(),cr.getTranscribe(),
-				cr.getTranscribeQuality(),cr.getStraightToVoicemail(),cr.getIfMachine(),cr.getIfMachineUrl(),cr.getIfMachineMethod()).getEntity(String.class);
+		return callProxy.makeCall(accountSid, cr.getFromCountryCode(),cr.getFrom(),cr.getToCountryCode(),cr.getTo(),cr.getUrl(),cr.getMethod(),cr.getStatusCallbackUrl(),
+				cr.getStatusCallbackMethod(),cr.getFallbackUrl(),cr.getFallbackUrlMethod(),cr.getHeartbeatUrl(),cr.getHeartbeatMethod(),
+				cr.getTimeout(),cr.getPlayDtmf(),cr.getHideCallerId(),cr.getRecord(),cr.getRecordCallbackUrl(),cr.getRecordCallbackMethod(),cr.getTranscribe(),
+				cr.getTranscribeCallbackUrl(),cr.getIfMachine()).getEntity(String.class);
 	}
 	
 	
@@ -618,17 +635,17 @@ public class Message360Connector {
 	* @throws M360Exception
 	*/
 	
-	public Message360<CallMessages> playAudios(String sid,String callsid,Boolean mix,Long length,Boolean loop,String audioUrl) throws M360Exception{
-		ClientResponse<Message360<CallMessages>> playAudio =callProxy.playAudio(sid, callsid, mix, length, loop, audioUrl);
+	public Message360<CallMessages> playAudios(String sid,String callsid,Boolean mix,Long length,Boolean loop,String audioUrl,Direction direction) throws M360Exception{
+		ClientResponse<Message360<CallMessages>> playAudio =callProxy.playAudio(sid, callsid, mix, length, loop, audioUrl,direction);
 	return returnThrows(playAudio);
 	}
 	
-	public Message360<CallMessages> playAudios(String callsid,Boolean mix,Long length,Boolean loop,String autioUrl) throws M360Exception{
-		return playAudios(conf.getSid(), callsid,mix,length,loop,autioUrl);
+	public Message360<CallMessages> playAudios(String callsid,Boolean mix,Long length,Boolean loop,String autioUrl,Direction direction) throws M360Exception{
+		return playAudios(conf.getSid(), callsid,mix,length,loop,autioUrl,direction);
 	}
 	
-	public String playJsonAudios(String callsid,Boolean mix,Long length,Boolean loop,String autioUrl) throws M360Exception{
-		return callProxy.playAudio(conf.getSid(), callsid,mix,length,loop,autioUrl).getEntity(String.class);
+	public String playJsonAudios(String callsid,Boolean mix,Long length,Boolean loop,String autioUrl,Direction direction) throws M360Exception{
+		return callProxy.playAudio(conf.getSid(), callsid,mix,length,loop,autioUrl,direction).getEntity(String.class);
 	}
 	
 	
@@ -654,7 +671,7 @@ public class Message360Connector {
 		return voiceEffects(conf.getSid(),callSid, audioDirection, pitchSemiTones, pitchOctaves, pitch, rate, tempo);
 	}
 	public Message360<CallMessages> voiceEffects(String callSid) throws M360Exception{
-		return voiceEffects(conf.getSid(),null, null, null, null, null, null, null);
+		return voiceEffects(conf.getSid(),callSid, null, null, null, null, null, null);
 	}
 	
 	public String voiceJsonEffects(String callSid,AudioDirection audioDirection,Long pitchSemiTones,Long pitchOctaves,Long pitch,Long rate,Long tempo) throws M360Exception{
@@ -702,17 +719,17 @@ public class Message360Connector {
 	 * @return
 	 * @throws M360Exception
 	 */
-	public Message360<NumberMessage> availableNumber(String sid,String areaCode,String region,PhoneNumberType phoneNumberType) throws M360Exception{
-		ClientResponse<Message360<NumberMessage>> availablePhoneNumber =phoneProxy.availableNumber(sid, areaCode, region, phoneNumberType);
+	public Message360<NumberMessage> availableNumber(String sid,Integer areaCode,PhoneNumberType phoneNumberType,Integer pageSize) throws M360Exception{
+		ClientResponse<Message360<NumberMessage>> availablePhoneNumber =phoneProxy.availableNumber(sid, areaCode, phoneNumberType,pageSize);
 	return returnThrows(availablePhoneNumber);
 	}
 	
-	public Message360<NumberMessage> availableNumber(String areaCode,String region,PhoneNumberType phoneNumberType) throws M360Exception{
-		return availableNumber(conf.getSid(), areaCode, region, phoneNumberType);
+	public Message360<NumberMessage> availableNumber(Integer areaCode,PhoneNumberType phoneNumberType,Integer pageSize) throws M360Exception{
+		return availableNumber(conf.getSid(), areaCode, phoneNumberType,pageSize);
 	}
 	
-	public String availableJsonNumber(String areaCode,String region,PhoneNumberType phoneNumberType) throws M360Exception{
-		return phoneProxy.availableNumber(conf.getSid(), areaCode, region, phoneNumberType).getEntity(String.class);
+	public String availableJsonNumber(Integer areaCode,PhoneNumberType phoneNumberType,Integer pageSize) throws M360Exception{
+		return phoneProxy.availableNumber(conf.getSid(), areaCode,phoneNumberType,pageSize).getEntity(String.class);
 	}
 	
 	/**
@@ -747,19 +764,19 @@ public class Message360Connector {
 	 */
 	
 	
-	public Message360<NumberMessage> listNumber(String sid,Long page,Long pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
+	public Message360<NumberMessage> listNumber(String sid,Integer page,Integer pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
 		ClientResponse<Message360<NumberMessage>> listNumber =phoneProxy.listNumber(sid, page, pageSize, friendlyName,numberType);
 	return returnThrows(listNumber);
 	}
 	
-	public Message360<NumberMessage> listNumber(Long page,Long pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
+	public Message360<NumberMessage> listNumber(Integer page,Integer pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
 		return listNumber(conf.getSid(), page, pageSize, friendlyName,numberType);
 	}
 	public Message360<NumberMessage> listNumber() throws M360Exception{
 		return listNumber(conf.getSid(), null,null, null,PhoneNumberType.ALL);
 	}
 	
-	public String listJsonNumber(Long page,Long pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
+	public String listJsonNumber(Integer page,Integer pageSize,String friendlyName, PhoneNumberType numberType) throws M360Exception{
 		return phoneProxy.listNumber(conf.getSid(), page, pageSize, friendlyName,numberType).getEntity(String.class);
 	}
 	public String listJsonNumber() throws M360Exception{
@@ -855,7 +872,7 @@ public class Message360Connector {
 	 * @throws M360Exception
 	 */
 	public Message360<NumberMessage> releaseNumber(String sid,String releaseNumber) throws M360Exception{
-		ClientResponse<Message360<NumberMessage>> buyNumber =phoneProxy.buyNumber(sid, releaseNumber);
+		ClientResponse<Message360<NumberMessage>> buyNumber =phoneProxy.releaseNumber(sid, releaseNumber);
 	return returnThrows(buyNumber);
 	}
 	
@@ -899,18 +916,28 @@ public class Message360Connector {
 	 * @return
 	 * @throws M360Exception
 	 */
-	private Message360<RecordMessage> listRecording(String sid) throws M360Exception{
-		ClientResponse<Message360<RecordMessage>> listRecording = recordingProxy.listRecording(sid);
+	private Message360<RecordMessage> listRecording(String sid,Integer page,Integer pageSize,String callSid,String dateCreated) throws M360Exception{
+		ClientResponse<Message360<RecordMessage>> listRecording = recordingProxy.listRecording(sid,page,pageSize,callSid,dateCreated);
 		return  returnThrows(listRecording);
 	}
 	
+	public Message360<RecordMessage> listRecording(Integer page,Integer pageSize,String callSid,String dateCreated) throws M360Exception{
+		return listRecording(conf.getSid(),page,pageSize,callSid,dateCreated);
+	}
 	public Message360<RecordMessage> listRecording() throws M360Exception{
-		return listRecording(conf.getSid());
+		return listRecording(conf.getSid(),null,null,null,null);
 	}
 	
-	public String listJsonRecording() throws M360Exception{
-		return recordingProxy.listRecording(conf.getSid()).getEntity(String.class);
+	
+	public String listJsonRecording(Integer page,Integer pageSize,String callSid,String dateCreated) throws M360Exception{
+		return recordingProxy.listRecording(conf.getSid(),page,pageSize,callSid,dateCreated).getEntity(String.class);
 	}
+	public String listJsonRecording() throws M360Exception{
+		return recordingProxy.listRecording(conf.getSid(),null,null,null,null).getEntity(String.class);
+	}
+	/*public String listJsonRecording(String callsid) throws M360Exception{
+		return recordingProxy.listRecording(conf.getSid(),callsid).getEntity(String.class);
+	}*/
 	
 	/**@see deleteRecording
 	 * 
@@ -964,20 +991,20 @@ public class Message360Connector {
 	 * @return
 	 * @throws M360Exception
 	 */
-	public Message360<TranscriptionMessage> listTranscription(String sid,Long page,Long pageSize,TranscriptionStatus status,Date date) throws M360Exception{
-		ClientResponse<Message360<TranscriptionMessage>> listTranscription =transcriptionProxy.listTranscription(sid,page,pageSize,status,getDateString(date));
+	public Message360<TranscriptionMessage> listTranscription(String sid,Integer page,Integer pageSize,TranscriptionStatus status,String date) throws M360Exception{
+		ClientResponse<Message360<TranscriptionMessage>> listTranscription =transcriptionProxy.listTranscription(sid,page,pageSize,status,date);
 		return returnThrows(listTranscription);
 	}
 	
-	public Message360<TranscriptionMessage> listTranscription(Long page,Long pageSize,TranscriptionStatus status,Date date) throws M360Exception{
+	public Message360<TranscriptionMessage> listTranscription(Integer page,Integer pageSize,TranscriptionStatus status,String date) throws M360Exception{
 		return listTranscription(conf.getSid(),page,pageSize,status,date);
 	}
 	public Message360<TranscriptionMessage> listTranscription() throws M360Exception{
 		return listTranscription(conf.getSid(),null,null,null,null);
 	}
 	
-	public String listJsonTranscription(Long page,Long pageSize,TranscriptionStatus status,Date date){
-		return transcriptionProxy.listTranscription(conf.getSid(),page,pageSize,status,getDateString(date)).getEntity(String.class);
+	public String listJsonTranscription(Integer page,Integer pageSize,TranscriptionStatus status,String date){
+		return transcriptionProxy.listTranscription(conf.getSid(),page,pageSize,status,date).getEntity(String.class);
 	}
 	public String listJsonTranscription(){
 		return transcriptionProxy.listTranscription(conf.getSid(),null,null,null,null).getEntity(String.class);
@@ -1023,7 +1050,7 @@ public class Message360Connector {
 	}
 	
 	public String recordingJsonTranscription(String recordingSid) throws M360Exception{
-		return transcriptionProxy.audioTranscriptionUrl(conf.getSid(), recordingSid).getEntity(String.class);
+		return transcriptionProxy.recordingTranscription(conf.getSid(), recordingSid).getEntity(String.class);
 	}
 	
 	/////////////////////
@@ -1044,17 +1071,17 @@ public class Message360Connector {
 	 * @throws M360Exception. 
 	 * 
 	 */
-	private Message360<Message360Email<SendEmail>> sendEmail(String sid,String to,String subject,String message) throws M360Exception{
-		ClientResponse<Message360<Message360Email<SendEmail>>> email = emailProxy.sendEmail(sid, to, subject, message);
+	private Message360<Message360Email<SendEmail>> sendEmail(String sid,String to,String cc,String bcc,String subject,EmailSendAs type,String message,List<String> attachment) throws M360Exception{
+		ClientResponse<Message360<Message360Email<SendEmail>>> email = emailProxy.sendEmail(sid, to,cc,bcc, subject,type, message,attachment);
 		return returnThrows(email);
 	}
 	
-	public Message360<Message360Email<SendEmail>> sendEmail(String to,String subject,String message) throws M360Exception{
-		return sendEmail(conf.getSid(), to, subject, message);
+	public Message360<Message360Email<SendEmail>> sendEmail(String to,String cc,String bcc,String subject,EmailSendAs type,String message,List<String> attachment) throws M360Exception{
+		return sendEmail(conf.getSid(), to,cc,bcc, subject,type, message,attachment);
 	}
 	
-	public String sendJsonEmail(String to,String subject,String message) throws M360Exception{
-		return  emailProxy.sendEmail(conf.getSid(), to, subject, message).getEntity(String.class);
+	public String sendJsonEmail(String to,String cc,String bcc,String subject,EmailSendAs type,String message,List<String> attachment) throws M360Exception{
+		return  emailProxy.sendEmail(conf.getSid(), to,cc,bcc, subject,type, message,attachment).getEntity(String.class);
 	}
 	
 
@@ -1110,16 +1137,16 @@ public class Message360Connector {
 	 * @throws M360Exception
 	 */
 	
-	public Message360<Message360Email<Bounce>> listBounceEmail(String sid) throws M360Exception{
-		ClientResponse<Message360<Message360Email<Bounce>>> listBouncEmail=emailProxy.listBouncesEmail(sid);
+	public Message360<Message360Email<Bounce>> listBounceEmail(String sid,Integer offset,Integer limit) throws M360Exception{
+		ClientResponse<Message360<Message360Email<Bounce>>> listBouncEmail=emailProxy.listBouncesEmail(sid,offset,limit);
 		return returnThrows(listBouncEmail);
 	}
-	public  Message360<Message360Email<Bounce>> listBounceEmail()throws M360Exception{
-		return listBounceEmail(conf.getSid());
+	public  Message360<Message360Email<Bounce>> listBounceEmail(Integer offset,Integer limit)throws M360Exception{
+		return listBounceEmail(conf.getSid(),offset,limit);
 	}
 	
-	public  String listJsonBounceEmail()throws M360Exception{
-		return emailProxy.listBouncesEmail(conf.getSid()).getEntity(String.class);
+	public  String listJsonBounceEmail(Integer offset,Integer limit)throws M360Exception{
+		return emailProxy.listBouncesEmail(conf.getSid(),offset,limit).getEntity(String.class);
 	}
 	
 	/**@see #deleteBounceEmail(String)
@@ -1147,16 +1174,16 @@ public class Message360Connector {
 	 * @throws M360Exception																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 	 */
 	
-	public Message360<Message360Email<Spam>> listSpamEmail(String sid) throws M360Exception{
-		ClientResponse<Message360<Message360Email<Spam>>> listSpamEmail=emailProxy.listSpamEmail(sid);
+	public Message360<Message360Email<Spam>> listSpamEmail(String sid,Integer offset,Integer limit) throws M360Exception{
+		ClientResponse<Message360<Message360Email<Spam>>> listSpamEmail=emailProxy.listSpamEmail(sid,offset,limit);
 		return returnThrows(listSpamEmail);
 	}
-	public Message360<Message360Email<Spam>> listSpamEmail()throws M360Exception{
-		return listSpamEmail(conf.getSid());
+	public Message360<Message360Email<Spam>> listSpamEmail(Integer offset,Integer limit)throws M360Exception{
+		return listSpamEmail(conf.getSid(),offset,limit);
 	}
 	
-	public String listJsonSpamEmail() throws M360Exception{
-		return emailProxy.listSpamEmail(conf.getSid()).getEntity(String.class);
+	public String listJsonSpamEmail(Integer offset,Integer limit) throws M360Exception{
+		return emailProxy.listSpamEmail(conf.getSid(),offset,limit).getEntity(String.class);
 	}
 	
 	/**@see #deleteSpamEmail(String)
@@ -1186,16 +1213,16 @@ public class Message360Connector {
 	 * @return
 	 * @throws M360Exception
 	 */
-	public Message360<Message360Email<Invalid>> listInvalidEmail(String sid) throws M360Exception{
-		ClientResponse< Message360<Message360Email<Invalid>>> listInValidEmail=emailProxy.listInvalidEmail(sid);
+	public Message360<Message360Email<Invalid>> listInvalidEmail(String sid,Integer offset,Integer limit) throws M360Exception{
+		ClientResponse< Message360<Message360Email<Invalid>>> listInValidEmail=emailProxy.listInvalidEmail(sid,offset,limit);
 		return returnThrows(listInValidEmail);
 	}
-	public  Message360<Message360Email<Invalid>> listInvalidEmail()throws M360Exception{
-		return listInvalidEmail(conf.getSid());
+	public  Message360<Message360Email<Invalid>> listInvalidEmail(Integer offset,Integer limit)throws M360Exception{
+		return listInvalidEmail(conf.getSid(),offset,limit);
 	}
 	
-	public  String listJsonInvalidEmail()throws M360Exception{
-		return emailProxy.listInvalidEmail(conf.getSid()).getEntity(String.class);
+	public  String listJsonInvalidEmail(Integer offset,Integer limit)throws M360Exception{
+		return emailProxy.listInvalidEmail(conf.getSid(),offset,limit).getEntity(String.class);
 	}
 	
 	/**
@@ -1248,17 +1275,17 @@ public class Message360Connector {
 	 * @throws M360Exception
 	 */
 	
-	public Message360<Message360Email<Unsubscribed>> listUnsubsribe(String sid)throws M360Exception{
-		ClientResponse<Message360<Message360Email<Unsubscribed>>> listUnsubscribe=emailProxy.listUnsubscribeEmailAddress(sid);
+	public Message360<Message360Email<Unsubscribed>> listUnsubsribe(String sid,Integer offset,Integer limit)throws M360Exception{
+		ClientResponse<Message360<Message360Email<Unsubscribed>>> listUnsubscribe=emailProxy.listUnsubscribeEmailAddress(sid,offset,limit);
 		return returnThrows(listUnsubscribe);
 	}
 	
-	public Message360<Message360Email<Unsubscribed>> listUnsubsribeEmaillAddress()throws M360Exception{
-		return listUnsubsribe(conf.getSid());
+	public Message360<Message360Email<Unsubscribed>> listUnsubsribeEmaillAddress(Integer offset,Integer limit)throws M360Exception{
+		return listUnsubsribe(conf.getSid(),offset,limit);
 	}
 	
-	public String listJsonUnsubsribeEmaillAddress()throws M360Exception{
-		return emailProxy.listUnsubscribeEmailAddress(conf.getSid()).getEntity(String.class);
+	public String listJsonUnsubsribeEmaillAddress(Integer offset,Integer limit)throws M360Exception{
+		return emailProxy.listUnsubscribeEmailAddress(conf.getSid(),offset,limit).getEntity(String.class);
 	}
 	
 	/**Delete the unsubscribe Email from email Addresses
@@ -1312,19 +1339,19 @@ public class Message360Connector {
 	 * @return
 	 * @throws M360Exception
 	 */
-	public Message360<ConferenceMessages> listConference(String sid, Long page, Long pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
+	public Message360<ConferenceMessages> listConference(String sid, Integer page, Integer pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
 		ClientResponse<Message360<ConferenceMessages>> viewConference=conferenceProxy.listConference(sid, page, pageSize, friendlyName, Status, dateCreated, dateUpdated);
 		return returnThrows(viewConference);
 	}
 	
-	public Message360<ConferenceMessages> listConference(Long page, Long pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
+	public Message360<ConferenceMessages> listConference(Integer page, Integer pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
 		return listConference(conf.getSid(), page, pageSize, friendlyName, Status, dateCreated, dateUpdated);
 	}
 	public Message360<ConferenceMessages> listConference()throws M360Exception{
 		return listConference(conf.getSid(), null, null, null, null, null, null);
 	}
 	
-	public String listJsonConference(Long page, Long pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
+	public String listJsonConference(Integer page, Integer pageSize,String friendlyName,ConferenceStatus Status, Date dateCreated, Date dateUpdated)throws M360Exception{
 		return conferenceProxy.listConference(conf.getSid(), page, pageSize, friendlyName, Status, dateCreated, dateUpdated).getEntity(String.class);
 	}
 	
@@ -1381,27 +1408,27 @@ public class Message360Connector {
 	/**
 	 * ClientResponse<Message360<ConferenceMessages>> listParticipant(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("Page") Long page,
-			@QueryParam("PageSize") Long pageSize,
+			@QueryParam("Page") Integer page,
+			@QueryParam("PageSize") Integer pageSize,
 			@QueryParam("Muted") Boolean muted,
 			@QueryParam("deaf") Boolean deaf,
 			@QueryParam("conferenceid") String conferenceid
 			);
 	 */
 	
-	public Message360<ConferenceMessages> listParticipant(String sid,Long page,Long pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
+	public Message360<ConferenceMessages> listParticipant(String sid,Integer page,Integer pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
 		ClientResponse<Message360<ConferenceMessages>> listParticipant=conferenceProxy.listParticipant(conf.getSid(), page,pageSize,muted,deaf,conferenceSid);
 		return returnThrows(listParticipant);
 	}
 	
-	public Message360<ConferenceMessages> listParticipant(Long page,Long pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
+	public Message360<ConferenceMessages> listParticipant(Integer page,Integer pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
 		return listParticipant(conf.getSid(), page,pageSize,muted,deaf,conferenceSid);
 	}
 	public Message360<ConferenceMessages> listParticipant(String conferenceSid)throws M360Exception{
 		return listParticipant(conf.getSid(), null,null,null,null,conferenceSid);
 	}
 	
-	public String listJsonParticipant(Long page,Long pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
+	public String listJsonParticipant(Integer page,Integer pageSize,Boolean muted,Boolean deaf,String conferenceSid)throws M360Exception{
 		return conferenceProxy.listParticipant(conf.getSid(), page,pageSize,muted,deaf,conferenceSid).getEntity(String.class);
 	}
 	public String listJsonParticipant(String conferenceSid)throws M360Exception{
@@ -1502,13 +1529,20 @@ public class Message360Connector {
 		return carrierProxy.carrierLookup(conf.getSid(), phoneNumber).getEntity(String.class);
 	}
 	
-	
-	public Message360<CarrierMessage> carrierLookupList(String sid,Long page,Long pageSize)throws M360Exception{
+	/**
+	 * 
+	 * @param sid
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<CarrierMessage> carrierLookupList(String sid,Integer page,Integer pageSize)throws M360Exception{
 		ClientResponse<Message360<CarrierMessage>> carrierLookup=carrierProxy.carrierLookupList(conf.getSid(), page,pageSize);
 		return returnThrows(carrierLookup);
 	}
 	
-	public Message360<CarrierMessage> carrierLookupList(Long page,Long pageSize)throws M360Exception{
+	public Message360<CarrierMessage> carrierLookupList(Integer page,Integer pageSize)throws M360Exception{
 		return carrierLookupList(conf.getSid(),page,pageSize);
 	}
 	public Message360<CarrierMessage> carrierLookupList()throws M360Exception{
@@ -1516,7 +1550,7 @@ public class Message360Connector {
 	}
 	
 	
-	public String carrierJsonLookupList(Long page,Long pageSize)throws M360Exception{
+	public String carrierJsonLookupList(Integer page,Integer pageSize)throws M360Exception{
 		return carrierProxy.carrierLookupList(conf.getSid(), page,pageSize).getEntity(String.class);
 	}
 	
@@ -1524,6 +1558,455 @@ public class Message360Connector {
 		return carrierProxy.carrierLookupList(conf.getSid(), null,null).getEntity(String.class);
 	}
 	
+	////////////////////////////////////
+	/////////DIRECT MAIL SERVICE////////
+	////////////////////////////////////
+	
+	/**
+	 * 
+	 * @param sid
+	 * @param name
+	 * @param email
+	 * @param phone
+	 * @param address
+	 * @param state
+	 * @param zip
+	 * @param city
+	 * @param country
+	 * @return
+	 * @throws M360Exception
+	 */
+	public  Message360<DMAddressBook> createAddressBook(String sid,String name,String email,String phone,String address,String state,String zip,String city,String country)throws M360Exception{
+		ClientResponse<Message360<DMAddressBook>> createAddressBook = addressBookProxy.createAddressBook(sid, name, email, phone, address, state, zip, city, country);
+		return returnThrows(createAddressBook);
+	}
+	
+	public Message360<DMAddressBook> createAddressBook(String name,String email,String phone,String address,String state,String zip,String city,String country)throws M360Exception{
+		return createAddressBook(conf.getSid(), name, email, phone, address, state, zip, city, country);
+	}
+	
+	public String createJsonAddressBook(String name,String email,String phone,String address,String state,String zip,String city,String country)throws M360Exception{
+		return addressBookProxy.createAddressBook(conf.getSid(), name, email, phone, address, state, zip, city, country).getEntity(String.class);
+	}
+	
+	//view Address Book
+	/**
+	 * 
+	 * @param sid
+	 * @param addressid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public  Message360<DMAddressBook> viewAddressBook(String sid,String addressid)throws M360Exception{
+		ClientResponse<Message360<DMAddressBook>> viewAddressBook = addressBookProxy.viewAddressBook(sid, addressid);
+		return returnThrows(viewAddressBook);
+	}
+	
+	public Message360<DMAddressBook> viewAddressBook(String addressid)throws M360Exception{
+		return viewAddressBook(conf.getSid(), addressid);
+	}
+	
+	public String viewJsonAddressBook(String addressid)throws M360Exception{
+		return addressBookProxy.viewAddressBook(conf.getSid(), addressid).getEntity(String.class);
+	}
+	
+	///list  Address book
+	/**
+	 * 
+	 * @param sid
+	 * @param page
+	 * @param pageSize
+	 * @param addresseSid
+	 * @param dateCreated
+	 * @return
+	 * @throws M360Exception
+	 */
+	public  Message360<DMAddressBook> listAddressBook(String sid,Integer page,Integer pageSize,String addresseSid,String dateCreated)throws M360Exception{
+		ClientResponse<Message360<DMAddressBook>> listAddressBook = addressBookProxy.listAddressBook(sid, page,pageSize,addresseSid,dateCreated);
+		return returnThrows(listAddressBook);
+	}
+	
+	public Message360<DMAddressBook> listAddressBook(Integer page,Integer pageSize,String addresseSid,String dateCreated)throws M360Exception{
+		return listAddressBook(conf.getSid(), page,pageSize,addresseSid,dateCreated);
+	}
+	public Message360<DMAddressBook> listAddressBook()throws M360Exception{
+		return listAddressBook(conf.getSid(), null,null,null,null);
+	}
+	
+	public String listJsonAddressBook(Integer page,Integer pageSize,String addresseSid,String dateCreated)throws M360Exception{
+		return addressBookProxy.listAddressBook(conf.getSid(), page,pageSize,addresseSid,dateCreated).getEntity(String.class);
+	}
+	public String listJsonAddressBook()throws M360Exception{
+		return addressBookProxy.listAddressBook(conf.getSid(), null,null,null,null).getEntity(String.class);
+	}
+	
+	//verify address book
+	/**
+	 * 
+	 * @param sid
+	 * @param addresseSid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public  Message360<DMAddressBook> verifyAddressBook(String sid,String addresseSid)throws M360Exception{
+		ClientResponse<Message360<DMAddressBook>> verifyAddressBook = addressBookProxy.verifyAddressBook(sid,addresseSid);
+		return returnThrows(verifyAddressBook);
+	}
+	
+	public Message360<DMAddressBook> verifyAddressBook(String addresseSid)throws M360Exception{
+		return verifyAddressBook(conf.getSid(), addresseSid);
+	}
+	
+	public String verifyJsonAddressBook(String addresseSid)throws M360Exception{
+		return addressBookProxy.verifyAddressBook(conf.getSid(),addresseSid).getEntity(String.class);
+	}
+	
+	//delete address book
+	
+	/**
+	 * 
+	 * @param sid
+	 * @param addresseSid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public  Message360<DMAddressBook> deleteAddressBook(String sid,String addresseSid)throws M360Exception{
+		ClientResponse<Message360<DMAddressBook>> deleteAddressBook = addressBookProxy.deleteAddressBook(sid,addresseSid);
+		return returnThrows(deleteAddressBook);
+	}
+	
+	public Message360<DMAddressBook> deleteAddressBook(String addresseSid)throws M360Exception{
+		return deleteAddressBook(conf.getSid(), addresseSid);
+	}
+	
+	public String deleteJsonAddressBook(String addresseSid)throws M360Exception{
+		return addressBookProxy.deleteAddressBook(conf.getSid(),addresseSid).getEntity(String.class);
+	}
+	
+	///Post Card
+	//create Post Card
+	/**
+	 * 
+	 * @param sid
+	 * @param to
+	 * @param from
+	 * @param attachbyid
+	 * @param front
+	 * @param back
+	 * @param message
+	 * @param setting
+	 * @param description
+	 * @param htmldata
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMPostCard> createPostCard(String sid,String to,String from,String attachbyid,String front,String back,String message,String setting,String description,String htmldata)throws M360Exception{
+		//System.out.println(postCardProxy.createPostCard(sid,to, from, attachbyid, front, back, message, setting, description, htmldata).getEntity(String.class));
+		ClientResponse<Message360<DMPostCard>> createPostCard =  postCardProxy.createPostCard(sid,to, from, attachbyid, front, back, message, setting, description, htmldata);
+		//createPostCard.created("");
+		//System.out.println("Attributes: "+createPostCard.getAttributes()+","+createPostCard.get);;
+		return returnThrows(createPostCard);
+	}
+	public Message360<DMPostCard> createPostCard(String to,String from,String attachbyid,String front,String back,String message,String setting,String description,String htmldata)throws M360Exception{
+		return createPostCard(conf.getSid(),to, from, attachbyid, front, back, message, setting, description, htmldata);
+	}
+	
+	public String createJsonPostCard(String to,String from,String attachbyid,String front,String back,String message,String setting,String description,String htmldata)throws M360Exception{
+		return postCardProxy.createPostCard(conf.getSid(), to, from, attachbyid, front, back, message, setting, description, htmldata).getEntity(String.class);
+	}
+	
+	//view Post Card
+	/**
+	 * 
+	 * @param sid
+	 * @param postcardid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMPostCard> viewPostCard(String sid,String postcardid)throws M360Exception{
+		ClientResponse<Message360<DMPostCard>> viewPostCard =  postCardProxy.viewPostCard(sid,postcardid);
+		return returnThrows(viewPostCard);
+	}
+	public Message360<DMPostCard> viewPostCard(String postcardid)throws M360Exception{
+		return viewPostCard(conf.getSid(),postcardid);
+	}
+	
+	public String viewJsonPostCard(String postcardid)throws M360Exception{
+		return postCardProxy.viewPostCard(conf.getSid(),postcardid).getEntity(String.class);
+	}
+	
+	///list Post Card
+	/**
+	 * 
+	 * @param sid
+	 * @param page
+	 * @param pageSize
+	 * @param postcardid
+	 * @param dateCreated
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMPostCard> listPostCard(String sid,Integer page,Integer pageSize,String postcardid,String dateCreated)throws M360Exception{
+		ClientResponse<Message360<DMPostCard>> listPostCard =  postCardProxy.listPostCard(sid,page,pageSize,postcardid,dateCreated);
+		return returnThrows(listPostCard);
+	}
+	public Message360<DMPostCard> listPostCard(Integer page,Integer pageSize,String postcardid,String dateCreated)throws M360Exception{
+		return listPostCard(conf.getSid(),page,pageSize,postcardid,dateCreated);
+	}
+	public Message360<DMPostCard> listPostCard()throws M360Exception{
+		return listPostCard(conf.getSid(),null,null,null,null);
+	}
+	
+	
+	public String listJsonPostCard(Integer page,Integer pageSize,String postcardid,String dateCreated)throws M360Exception{
+		return postCardProxy.listPostCard(conf.getSid(),page,pageSize,postcardid,dateCreated).getEntity(String.class);
+	}
+	public String listJsonPostCard()throws M360Exception{
+		return postCardProxy.listPostCard(conf.getSid(),null,null,null,null).getEntity(String.class);
+	}
+	
+	//delete Post Card
+	/**
+	 * 
+	 * @param sid
+	 * @param postcardid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMPostCard> deletePostCard(String sid,String postcardid)throws M360Exception{
+		ClientResponse<Message360<DMPostCard>> deletePostCard =  postCardProxy.deletePostCard(sid,postcardid);
+		return returnThrows(deletePostCard);
+	}
+	
+	public Message360<DMPostCard> deletePostCard(String postcardid)throws M360Exception{
+		return deletePostCard(conf.getSid(),postcardid);
+	}
+	
+	/**
+	 * @param postcardid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public String deleteJsonPostCard(String postcardid)throws M360Exception{
+		return postCardProxy.deletePostCard(conf.getSid(),postcardid).getEntity(String.class);
+	}
+	
+	
+	///////////////
+	////Letters
+	//////////////
+	
+	/////Create Letter
+	/**${
+	 * 
+	 * @param accountSid
+	 * @param to
+	 * @param from
+	 * @param attachbyid
+	 * @param file
+	 * @param color
+	 * @param extraservice
+	 * @param doublesided
+	 * @param description
+	 * @param template
+	 * @param htmldata
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMLetter> createLetters(String accountSid, String to, String from, String attachbyid, String  file, Boolean color, ExtraService extraservice, Boolean doublesided, String description, Boolean template, String htmldata)throws M360Exception{
+		ClientResponse<Message360<DMLetter>> createPostCard =  letterProxy.createLetter(accountSid, to, from, attachbyid, file, color, extraservice, doublesided, description, template, htmldata);
+		return returnThrows(createPostCard);
+	}
+	
+	public Message360<DMLetter> createLetters( String to, String from, String attachbyid, String  file, Boolean color, ExtraService extraservice, Boolean doublesided, String description, Boolean template, String htmldata)throws M360Exception{
+		return createLetters(conf.getSid(), to, from, attachbyid, file, color, extraservice, doublesided, description, template, htmldata);
+	}
+	
+	public String createJsonLetters( String to, String from, String attachbyid, String  file, Boolean color, ExtraService extraservice, Boolean doublesided, String description, Boolean template, String htmldata)throws M360Exception{
+		return letterProxy.createLetter(conf.getSid(), to, from, attachbyid, file, color, extraservice, doublesided, description, template, htmldata).getEntity(String.class);
+	}
+
+	//view Letter
+	/**
+	 * 
+	 * @param accountSid
+	 * @param letterid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMLetter> viewLetters(String accountSid, String letterid)throws M360Exception{
+		ClientResponse<Message360<DMLetter>> viewPostCard =  letterProxy.viewLetter(accountSid, letterid);
+		return returnThrows(viewPostCard);
+	}
+	
+	public Message360<DMLetter> viewLetters( String letterid)throws M360Exception{
+		return viewLetters(conf.getSid(), letterid);
+	}
+	
+	public String viewJsonLetters(String letterid)throws M360Exception{
+		return letterProxy.viewLetter(conf.getSid(), letterid).getEntity(String.class);
+	}
+	
+	////List Letter
+	
+	/**
+	 * 
+	 * @param accountSid
+	 * @param page
+	 * @param pageSize
+	 * @param letterid
+	 * @param dateCreated
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMLetter> listLetters(String accountSid, Integer page,Integer pageSize,String letterid,String dateCreated)throws M360Exception{
+		ClientResponse<Message360<DMLetter>> listPostCard =  letterProxy.listLetter(accountSid, page,pageSize,letterid,dateCreated);
+		return returnThrows(listPostCard);
+	}
+	
+	public Message360<DMLetter> listLetters()throws M360Exception{
+		return  listLetters(conf.getSid(), null,null,null,null);
+	}
+	
+	public Message360<DMLetter> listLetters(Integer page,Integer pageSize,String letterid,String dateCreated)throws M360Exception{
+		return  listLetters(conf.getSid(), page,pageSize,letterid,dateCreated);
+	}
+	
+	public String  listJsonLetters(Integer page,Integer pageSize,String letterid,String dateCreated)throws M360Exception{
+		return   letterProxy.listLetter(conf.getSid(), page,pageSize,letterid,dateCreated).getEntity(String.class);
+	}
+	public String  listJsonLetters()throws M360Exception{
+		return   letterProxy.listLetter(conf.getSid(), null,null,null,null).getEntity(String.class);
+	}
+	
+	//Delete letter
+	
+	/**
+	 * 
+	 * @param accountSid
+	 * @param letterid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMLetter> deleteLetters(String accountSid, String letterid)throws M360Exception{
+		ClientResponse<Message360<DMLetter>> deletePostCard =  letterProxy.deleteLetter(accountSid, letterid);
+		return returnThrows(deletePostCard);
+	}
+	
+	public Message360<DMLetter> deleteLetters( String letterid)throws M360Exception{
+		return deleteLetters(conf.getSid(), letterid);
+	}
+	
+	public String deleteJsonLetters(String letterid)throws M360Exception{
+		return letterProxy.deleteLetter(conf.getSid(), letterid).getEntity(String.class);
+	}
+	
+	///////////////////
+	////////AREA MAIL
+	/////////////////
+	
+	//CREATE AREAMAIL
+	/**
+	 * 
+	 * @param accountSid
+	 * @param attachbyid
+	 * @param front
+	 * @param back
+	 * @param description
+	 * @param routes
+	 * @param targettype
+	 * @param htmldata
+	 * @return
+	 * @throws M360Exception
+	 */
+	
+	
+	public Message360<DMAreaMail> createAreaMail(String accountSid,String attachbyid, String front, String back, String description, String routes, TargetType targettype, String htmldata)throws M360Exception{
+		ClientResponse<Message360<DMAreaMail>> createAreaMail =  areaMailProxy.createAreaMail(accountSid, attachbyid, front, back, description, routes, targettype, htmldata);
+		return returnThrows(createAreaMail);
+	}
+	
+	public Message360<DMAreaMail> createAreaMail( String attachbyid, String front, String back, String description, String routes, TargetType targettype, String htmldata)throws M360Exception{
+		return createAreaMail(conf.getSid(), attachbyid, front, back, description, routes, targettype, htmldata );
+	}
+	
+	public String createJsonAreaMail(String attachbyid, String front, String back, String description, String routes, TargetType targettype, String htmldata)throws M360Exception{
+		return areaMailProxy.createAreaMail(conf.getSid(), attachbyid, front, back, description, routes, targettype, htmldata).getEntity(String.class);
+	}
+	
+	//View Area Mail
+	/**{@author xoyal}
+	 * 
+	 * @param accountSid
+	 * @param areamailid
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMAreaMail> viewAreaMail(String accountSid,String areamailid)throws M360Exception{
+		ClientResponse<Message360<DMAreaMail>> viewAreaMail =  areaMailProxy.viewAreaMail(accountSid, areamailid);
+		return returnThrows(viewAreaMail);
+	}
+	
+	public Message360<DMAreaMail> viewAreaMail(String areamailid)throws M360Exception{
+		return viewAreaMail(conf.getSid(),areamailid);
+	}
+	
+	public String viewJsonAreaMail(String areamailid)throws M360Exception{
+		return areaMailProxy.viewAreaMail(conf.getSid(), areamailid).getEntity(String.class);
+	}
+	
+	//list Area Mail
+	/**
+	 * 
+	 * @param accountSid []
+	 * @param page
+	 * @param pageSize
+	 * @param areamailid
+	 * @param dateCreated
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMAreaMail> listAreaMail(String accountSid,Integer page,Integer pageSize,String areamailid,String dateCreated)throws M360Exception{
+		ClientResponse<Message360<DMAreaMail>> listAreaMail =  areaMailProxy.listAreaMail(accountSid, page,pageSize,areamailid,dateCreated);
+		return returnThrows(listAreaMail);
+	}
+	
+	public Message360<DMAreaMail> listAreaMail(Integer page,Integer pageSize,String areamailid,String dateCreated)throws M360Exception{
+		return listAreaMail(conf.getSid(), page,pageSize,areamailid,dateCreated);
+	}
+	
+	public String listJsonAreaMail(Integer page,Integer pageSize,String areamailid,String dateCreated)throws M360Exception{
+		return areaMailProxy.listAreaMail(conf.getSid(),  page,pageSize,areamailid,dateCreated).getEntity(String.class);
+	}
+	
+	public Message360<DMAreaMail> listAreaMail()throws M360Exception{
+		return listAreaMail(conf.getSid(),  null,null,null,null);
+	}
+	
+	public String listJsonAreaMail()throws M360Exception{
+		return areaMailProxy.listAreaMail(conf.getSid(),  null,null,null,null).getEntity(String.class);
+	}
+	
+	//Delete Area Mail
+	/**
+	 * 
+	 * @param accountSid [account sid for testing]
+	 * @param areamailid [Area email id]
+	 * @return
+	 * @throws M360Exception
+	 */
+	public Message360<DMAreaMail> deleteAreaMail(String accountSid,String areamailid)throws M360Exception{
+		ClientResponse<Message360<DMAreaMail>> deleteAreaMail =  areaMailProxy.deleteAreaMail(accountSid, areamailid);
+		return returnThrows(deleteAreaMail);
+	}
+	
+	public Message360<DMAreaMail> deleteAreaMail(String areamailid)throws M360Exception{
+		return deleteAreaMail(conf.getSid(),areamailid);
+	}
+	
+	public String deleteJsonAreaMail(String areamailid)throws M360Exception{
+		return areaMailProxy.deleteAreaMail(conf.getSid(), areamailid).getEntity(String.class);
+	}
 	
 	
 }

@@ -27,10 +27,10 @@ public class DeleteBlockEmail {
 		Message360Connector conn = new Message360Connector(conf);
 		try {
 			if(M360Constants.JSONFORMAT){
-				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("{emailsAddress}");
+				String deleteJsonBlockEmailAddr=conn.deleteJsonBlocksEmailAdress("{deleteBlockEmailId}");
 				System.out.println(deleteJsonBlockEmailAddr);
 			}else{
-				Message360<Message360Email<Blocked>> deleteBlocEmailAddr = conn.deleteBlocksEmailAdress("{emailsAddress}");
+				Message360<Message360Email<Blocked>> deleteBlocEmailAddr = conn.deleteBlocksEmailAdress("{deleteBlockEmailId}");
 				if(deleteBlocEmailAddr.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<deleteBlocEmailAddr.getMessage360().getErrors().getError().size();x++){
 						Error error=deleteBlocEmailAddr.getMessage360().getErrors().getError().get(x);
@@ -38,14 +38,8 @@ public class DeleteBlockEmail {
 					}
 				}else{
 					System.out.println("Delete Blocks Email");
-					for(EmailAddress curBlockEmailAddres:deleteBlocEmailAddr.getMessage360().getEmail().getBlocked()){
-						if(curBlockEmailAddres.getDeleteStatus().toLowerCase().equals("fail")){
-							System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus()+",Reason:="+curBlockEmailAddres.getReason());
-						}else{
-							System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus());
-						}
-					}
-					
+					EmailAddress curBlockEmailAddres=deleteBlocEmailAddr.getMessage360().getEmail().getBlockedEmailAddres();
+					System.out.println("Email:"+curBlockEmailAddres.getEmail()+",Delete Status:="+curBlockEmailAddres.getDeleteStatus()+",Reason:="+curBlockEmailAddres.getReason());
 				}
 			}
  		} catch (M360Exception e) {

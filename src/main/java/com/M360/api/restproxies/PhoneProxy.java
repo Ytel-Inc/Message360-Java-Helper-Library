@@ -9,7 +9,6 @@
 package com.M360.api.restproxies;
 
 import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,18 +29,18 @@ public interface PhoneProxy {
 	@Produces("application/json")
 	ClientResponse<Message360<NumberMessage>> availableNumber(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("areacode") String areacode,
-			@QueryParam("region") String region,
-			@QueryParam("numbertype") PhoneNumberType numbertype
+			@QueryParam(value="areacode") Integer areacode,
+			@QueryParam(value="numbertype") PhoneNumberType numbertype,
+			@QueryParam(value="pagesize") Integer pagesize
 			);
 	
 	
-	@GET
-	@Path("incomingphone/viewnumber/{PhoneNumber}.json")
+	@POST
+	@Path("incomingphone/viewnumber.json")
 	@Produces("application/json")
 	ClientResponse<Message360<NumberMessage>> viewNumber(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("PhoneNumber") String phoneNumber
+			@QueryParam("phonenumber") String phoneNumber
 			);
 	
 	
@@ -50,8 +49,8 @@ public interface PhoneProxy {
 	@Produces("application/json")
 	ClientResponse<Message360<NumberMessage>> listNumber(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("Page") Long page,
-			@QueryParam("PageSize") Long pageSize,
+			@QueryParam("Page") Integer page,
+			@QueryParam("PageSize") Integer pageSize,
 			@QueryParam("FriendlyName") String friendlyName,
 			@QueryParam("NumberType") PhoneNumberType numberType
 			);
@@ -63,12 +62,6 @@ public interface PhoneProxy {
 			@PathParam("AccountSid") String accountSid,
 			@QueryParam("phonenumber") String PhoneNumber
 			);
-	
-	
-	
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/incomingphone/updatenumber.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d 
-	//'PhoneNumber=9494685018&FriendlyName=(908) 224-2413&VoiceUrl=gf&VoiceMethod=POST&VoiceFallbackUrl=fg&VoiceFallbackMethod=POST&
-	//HangupCallback=fgh&HangupCallbackMethod=POST&HeartbeatUrl=fgh&HeartbeatMethod=POST&SmsUrl=fgh&SmsMethod=POST&SmsFallbackUrl=fghfg&SmsFallbackMethod=POST'
 	
 	@POST
 	@Path("incomingphone/updatenumber.json")
@@ -91,14 +84,12 @@ public interface PhoneProxy {
 			@QueryParam("SmsFallbackMethod") HttpMethod smsFallbackMethod
 			);
 	
-	
-	//curl -X DELETE 'https://api-dev.message360.com/api/v1b/incomingphone/releasenumber/9495350361.xml' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f'
 	@DELETE
-	@Path("incomingphone/releasenumber/{ReleaseNumber}.json")
+	@Path("incomingphone/releasenumber.json")
 	@Produces("application/json")
 	ClientResponse<Message360<NumberMessage>> releaseNumber(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("ReleaseNumber") String releaseNumber
+			@QueryParam("phonenumber") String releaseNumber
 			);
 	
 }

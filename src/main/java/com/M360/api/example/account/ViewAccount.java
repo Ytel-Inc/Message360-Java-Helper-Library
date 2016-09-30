@@ -11,6 +11,7 @@
  */
 package com.M360.api.example.account;
 
+
 import com.M360.api.Message360Connector;
 import com.M360.api.configuration.BasicM360Configuration;
 import com.M360.api.configuration.M360Constants;
@@ -27,11 +28,12 @@ public class ViewAccount {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
+			String inputDate="2010-10-15";//INSERT DATE HERE 
 			if(M360Constants.JSONFORMAT){
-				String accountResponse=conn.viewJsonAccount();
+				String accountResponse=conn.viewJsonAccount(inputDate);
 				System.out.println(accountResponse);
 			}else{
-				Message360<AccountMessage> accountExample = conn.viewAccount();
+				Message360<AccountMessage> accountExample = conn.viewAccount(inputDate);
 				if(accountExample.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<accountExample.getMessage360().getErrors().getError().size();x++){
 						Error error=accountExample.getMessage360().getErrors().getError().get(x);
@@ -42,6 +44,9 @@ public class ViewAccount {
 				}
 			}
 		} catch (M360Exception e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

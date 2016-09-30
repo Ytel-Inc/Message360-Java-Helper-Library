@@ -1,6 +1,8 @@
 package com.M360.api.domain.email;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -10,10 +12,14 @@ import com.M360.api.json.JsonDateParser;
 
 public class SendEmail extends BaseMessage360Object{
 	
-	@JsonProperty(value="Sid")
-	private String sid=null;
+	@JsonProperty(value="EmailSid")
+	private String emailSid=null;
 	@JsonProperty(value="SentEmails")
 	private String sentEmails=null;
+	@JsonProperty(value="Cc")
+	private List<String> cc = null;
+	@JsonProperty(value="Bcc")
+	private List<String> bcc = null;
 	@JsonDeserialize(using = JsonDateParser.class)
 	@JsonProperty(value="Date")
 	private Date date=null;
@@ -23,6 +29,21 @@ public class SendEmail extends BaseMessage360Object{
 	private Integer totalEmailSent=null;
 	@JsonProperty(value="TotalPrize")
 	private Double totalPrize=null;
+	
+	public SendEmail(){
+		cc = new ArrayList<String>();
+		bcc = new ArrayList<String>();
+		
+	}
+	
+	public String getEmailSid() {
+		return emailSid;
+	}
+
+	public void setEmailSid(String emailSid) {
+		this.emailSid = emailSid;
+	}
+
 	public String getSentEmails() {
 		return sentEmails;
 	}
@@ -53,11 +74,21 @@ public class SendEmail extends BaseMessage360Object{
 	public void setTotalPrize(Double totalPrize) {
 		this.totalPrize = totalPrize;
 	}
-	public String getSid() {
-		return sid;
+
+	public List<String> getCc() {
+		return cc;
 	}
-	public void setSid(String sid) {
-		this.sid = sid;
+
+	public void setCc(List<String> cc) {
+		this.cc = cc;
+	}
+
+	public List<String> getBcc() {
+		return bcc;
+	}
+
+	public void setBcc(List<String> bcc) {
+		this.bcc = bcc;
 	}
 	
 }

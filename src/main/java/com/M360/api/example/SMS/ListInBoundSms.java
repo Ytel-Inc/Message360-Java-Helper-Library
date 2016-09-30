@@ -36,7 +36,7 @@ public class ListInBoundSms {
 					}
 				}else{
 					for(Message inboundSMS : inBoundSMSList.getMessage360().getMessages().getMessage()) {
-						System.out.println(inboundSMS.getSid()+",from :="+inboundSMS.getFrom()+",To :="+inboundSMS.getTo());
+						System.out.println(inboundSMS.getSid()+",From :="+inboundSMS.getFrom()+",To :="+inboundSMS.getTo());
 					}
 				}	
 			}

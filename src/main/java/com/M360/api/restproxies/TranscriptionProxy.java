@@ -10,7 +10,6 @@
 package com.M360.api.restproxies;
 
 
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -25,12 +24,12 @@ import com.M360.api.domain.responses.TranscriptionMessage;
 
 public interface TranscriptionProxy {
 	
-	@GET
-	@Path("transcriptions/viewtranscription/{transcriptionsid}.json")
+	@POST
+	@Path("transcriptions/viewtranscription.json")
 	@Produces("application/json")
 	ClientResponse<Message360<TranscriptionMessage>> viewTranscription(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("transcriptionsid") String transcriptionsid
+			@QueryParam("transcriptionsid") String transcriptionsid
 			);
 	
 	@POST
@@ -38,12 +37,11 @@ public interface TranscriptionProxy {
 	@Produces("application/json")
 	ClientResponse<Message360<TranscriptionMessage>> listTranscription(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("Page") Long page,
-    		@QueryParam("PageSize") Long pageSize,
+			@QueryParam("Page") Integer page,
+    		@QueryParam("PageSize") Integer pageSize,
     		@QueryParam("status") TranscriptionStatus transcriptionStatus,
     		@QueryParam("dateTranscribed") String dateTranscribed
 			);
-	
 
 	@POST
 	@Path("transcriptions/audiourltranscription.json")

@@ -8,8 +8,6 @@ import com.M360.api.domain.conference.Conference;
 import com.M360.api.domain.responses.ConferenceMessages;
 import com.M360.api.exception.Error;
 import com.M360.api.exception.M360Exception;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class ListConference {
 	public static  void main(String[] args) throws Exception{

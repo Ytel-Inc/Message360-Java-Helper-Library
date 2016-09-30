@@ -25,9 +25,6 @@ import com.M360.api.domain.responses.ConferenceMessages;
 
 public interface ConferenceProxy {
 
-	//viewConference
-	//curl -X GET 'https://api-dev.message360.com/api/v1b/conferences/viewconference/CF7eba209c-9aaf-42c6-805a-3c3eb623138d.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f'
-	
 	@POST
 	@Path("conferences/viewconference.json")
 	@Produces("application/json")
@@ -36,27 +33,18 @@ public interface ConferenceProxy {
 			@QueryParam("conferencesid") String conferencesid
 			);
 	
-	//list conference
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/conferences/listconference.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d  
-	//'Page=1&PageSize=2&FriendlyName=asd&Status=in-progress&DateCreated=2015-12-07&DateUpdated=2015-12-22'
-	
 	@POST
 	@Path("conferences/listconference.json")
 	@Produces("application/json")
 	ClientResponse<Message360<ConferenceMessages>> listConference(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("Page") Long page,
-			@QueryParam("PageSize") Long pageSize,
+			@QueryParam("Page") Integer page,
+			@QueryParam("PageSize") Integer pageSize,
 			@QueryParam("FriendlyName") String friendlyName,
 			@QueryParam("Status") ConferenceStatus Status,
 			@QueryParam("DateCreated") Date dateCreated,
 			@QueryParam("DateUpdated") Date dateUpdated
 			);
-	
-	
-	//addParticepant
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/Conferences/addParticipant.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d 
-	//'conferencesid=CF7eba209c-9aaf-42c6-805a-3c3eb623138d&participantnumber=8983183436&muted=true&deaf=true&tocountrycode=1'
 	
 	@POST
 	@Path("Conferences/addParticipant.json")
@@ -71,10 +59,6 @@ public interface ConferenceProxy {
 			);
 	
 	
-	//viewParticepant
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/conferences/viewparticipant.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d  
-	//'conferenceid=CF7eba209c-9aaf-42c6-805a-3c3eb623138d&participantsid=sdfsdfds'
-	
 	@POST
 	@Path("conferences/viewparticipant.json")
 	@Produces("application/json")
@@ -85,26 +69,17 @@ public interface ConferenceProxy {
 			);
 	
 	
-	//listParticepant
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/conferences/listparticipant.json'  -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d  
-	//'Page=2&PageSize=3&Muted=true&deaf=false&conferenceid=CF7eba209c-9aaf-42c6-805a-3c3eb623138d'
-	
 	@POST
 	@Path("conferences/listparticipant.json")
 	@Produces("application/json")
 	ClientResponse<Message360<ConferenceMessages>> listParticipant(
 			@PathParam("AccountSid") String accountSid,
-			@QueryParam("Page") Long page,
-			@QueryParam("PageSize") Long pageSize,
+			@QueryParam("Page") Integer page,
+			@QueryParam("PageSize") Integer pageSize,
 			@QueryParam("Muted") Boolean muted,
 			@QueryParam("deaf") Boolean deaf,
 			@QueryParam("conferenceid") String conferenceid
 			);
-	
-	//deaformute participant
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/Conferences/deafMuteParticipant.json'  -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d 
-	//'conferenceid=CF7eba209c-9aaf-42c6-805a-3c3eb623138d&participantid=fgdfgd&muted=true&deaf=true'
-	
 	
 	@POST
 	@Path("Conferences/deafMuteParticipant.json")
@@ -117,12 +92,6 @@ public interface ConferenceProxy {
 			@QueryParam("deaf") Boolean deaf
 			);
 	
-	
-	
-	//hangupParticipant
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/Conferences/hangupParticipant.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d  
-	//'conference_id=CF7eba209c-9aaf-42c6-805a-3c3eb623138d&call_sid=dfgdfg'
-	
 	@POST
 	@Path("Conferences/hangupParticipant.json")
 	@Produces("application/json")
@@ -131,10 +100,6 @@ public interface ConferenceProxy {
 			@QueryParam("conferencesid") String conferencesid,
 			@QueryParam("participantsid") String participantSid
 			);
-	
-	//playaudio
-	//curl -X POST 'https://api-dev.message360.com/api/v1b/Conferences/playAudio.json' -u 'YT94c49d220e5a45dc516f9733460460f5:53ee61684ef2a3805fb4721dfdf9672f' -d  
-	//'Conferenceid=CF7eba209c-9aaf-42c6-805a-3c3eb623138d&participant_Sid=adsfdsf&audiourl=;http://192.168.2.2/audio2.wav'
 	
 	@POST
 	@Path("Conferences/playAudio.json")

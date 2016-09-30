@@ -33,7 +33,7 @@ public class UpdateNumber {
 				}else{
 					System.out.println("Update number:");
 					for(Phone curPhone:updateNumber.getMessage360().getPhone()){
-						System.out.println("sid="+curPhone.getPhoneNumber()+",Sid:="+curPhone.getFriendlyName());
+						System.out.println("Phone Number="+curPhone.getPhoneNumber()+",New Friendly Name:="+curPhone.getFriendlyName());
 					}
 				}
 			}

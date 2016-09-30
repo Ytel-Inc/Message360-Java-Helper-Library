@@ -23,8 +23,6 @@ public class Phone extends BaseMessage360Object{
 	private String smsEnabled;
 	@JsonProperty(value="Price")
 	private Price price=null;
-	@JsonProperty(value="State")
-	private String state=null;
 	@JsonProperty(value="Sid")
 	private String sid=null;
 	@JsonProperty(value="PerMinuteCost")
@@ -88,6 +86,12 @@ public class Phone extends BaseMessage360Object{
 	
 	@JsonProperty(value="Message")//REpeated
 	private String message;
+	@JsonProperty(value="Region")//REpeated
+	private String region;
+	
+	
+	@JsonProperty(value="SMSRequestUrl")//REpeated
+	private String smsRequestUrl;
 	
 	
 	public Phone(){
@@ -149,14 +153,6 @@ public class Phone extends BaseMessage360Object{
 
 	public void setPrice(Price price) {
 		this.price = price;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
 	}
 
 	public String getSid() {
@@ -365,6 +361,14 @@ public class Phone extends BaseMessage360Object{
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 	
 	

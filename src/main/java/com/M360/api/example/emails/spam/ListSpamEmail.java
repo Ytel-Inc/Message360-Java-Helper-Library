@@ -24,11 +24,12 @@ public class ListSpamEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
+			Integer offset=null,limit=null;
 			if(M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.listJsonSpamEmail();
+				String jsonEmailResponse=conn.listJsonSpamEmail(offset,limit);
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Spam>> listSpam = conn.listSpamEmail();
+				Message360<Message360Email<Spam>> listSpam = conn.listSpamEmail(offset,limit);
 				if(listSpam.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<listSpam.getMessage360().getErrors().getError().size();x++){
 						Error error=listSpam.getMessage360().getErrors().getError().get(x);
@@ -36,7 +37,7 @@ public class ListSpamEmail {
 					}
 				}else{
 					System.out.println("List of Spam Emails");
-					for(EmailAddress curInvalid:listSpam.getMessage360().getEmail().getSpam()){
+					for(EmailAddress curInvalid:listSpam.getMessage360().getEmail().getSpamReports()){
 						System.out.println(curInvalid.getEmail());
 					}
 				}

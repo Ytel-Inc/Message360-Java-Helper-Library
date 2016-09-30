@@ -36,12 +36,8 @@ public class AddUnsubscribeEmail {
 					}
 				}else{
 					System.out.println("Add Unsubscribe Emails");
-					for(EmailAddress emailAddr:addUnsubscribed.getMessage360().getEmail().getUnsubscribed()){
-						if(!emailAddr.getAddStatus().toLowerCase().equals("fail"))
-							System.out.println("20:Email:= "+emailAddr.getEmail()+",Add Status:="+emailAddr.getAddStatus());
-						else
-							System.out.println("20:Email:= "+emailAddr.getEmail()+",Add Status:="+emailAddr.getAddStatus()+",Reason:="+emailAddr.getReason());
-					}
+					EmailAddress unsubscribedEmailAddress=addUnsubscribed.getMessage360().getEmail().getUnsubscribedEmailAddress();
+					System.out.println("39: Email "+unsubscribedEmailAddress.getEmail()+",Add status:"+unsubscribedEmailAddress.getAddStatus());
 				}
 			}
 		} catch (M360Exception e) {
@@ -49,3 +45,4 @@ public class AddUnsubscribeEmail {
 		}
 	}
 }
+

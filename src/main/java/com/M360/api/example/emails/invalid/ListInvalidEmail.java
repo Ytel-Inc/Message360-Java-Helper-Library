@@ -24,11 +24,12 @@ public class ListInvalidEmail {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
+			Integer offset=null,limit=null;
 			if(M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.listJsonInvalidEmail();
+				String jsonEmailResponse=conn.listJsonInvalidEmail(offset,limit);
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Invalid>>  invalidEmailList = conn.listInvalidEmail();
+				Message360<Message360Email<Invalid>>  invalidEmailList = conn.listInvalidEmail(offset,limit);
 				if(invalidEmailList.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<invalidEmailList.getMessage360().getErrors().getError().size();x++){
 						Error error=invalidEmailList.getMessage360().getErrors().getError().get(x);
@@ -36,7 +37,7 @@ public class ListInvalidEmail {
 					}
 				}else{
 					System.out.println("List of Invalid Emails");
-					for(EmailAddress curInvalid:invalidEmailList.getMessage360().getEmail().getInvalid()){
+					for(EmailAddress curInvalid:invalidEmailList.getMessage360().getEmail().getInvalidEmailAddresses()){
 						System.out.println(curInvalid.getEmail()+"\tReason:"+curInvalid.getReason());
 					}
 				}
@@ -46,3 +47,4 @@ public class ListInvalidEmail {
 		}
 	}
 }
+

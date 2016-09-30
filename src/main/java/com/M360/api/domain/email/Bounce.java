@@ -6,19 +6,32 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Bounce {
+	
+	@JsonProperty(value="BouncedEmailAddresses")
+	private List<EmailAddress> bouncedEmailAddresses=null;
 	@JsonProperty(value="BouncedEmailAddress")
-	private List<EmailAddress> bounce=null;
+	private EmailAddress bouncedEmailAddress=null;
 	
 	public Bounce(){
 		super();
-		bounce =new ArrayList<EmailAddress>();
+		bouncedEmailAddress = new  EmailAddress();
+		bouncedEmailAddresses = new ArrayList<EmailAddress>();
 	}
 
-	public List<EmailAddress> getBounce() {
-		return bounce;
+	public List<EmailAddress> getBouncedEmailAddresses() {
+		return bouncedEmailAddresses;
 	}
 
-	public void setBounce(List<EmailAddress> unsubscribed) {
-		this.bounce = unsubscribed;
+	public void setBouncedEmailAddresses(List<EmailAddress> bouncedEmailAddresses) {
+		this.bouncedEmailAddresses = bouncedEmailAddresses;
 	}
+
+	public EmailAddress getBouncedEmailAddress() {
+		return bouncedEmailAddress;
+	}
+	public void setBouncedEmailAddress(EmailAddress bouncedEmailAddress) {
+		this.bouncedEmailAddress = bouncedEmailAddress;
+	}
+
+	
 }

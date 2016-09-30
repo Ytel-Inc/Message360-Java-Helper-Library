@@ -30,7 +30,7 @@ public class ViewNumbers {
 					System.out.println("List of View Number");
 					for(int x=0;x<viewNumber.getMessage360().getPhone().size();x++){
 						Phone curPhone=viewNumber.getMessage360().getPhone().get(x);
-						System.out.println(x+") sid="+curPhone.getPhoneNumber()+",sid :="+curPhone.getSid());
+						System.out.println(x+") Phone Number="+curPhone.getPhoneNumber()+",sid :="+curPhone.getAccountSid());
 					}
 				}
 			}

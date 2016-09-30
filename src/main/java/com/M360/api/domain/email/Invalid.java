@@ -6,19 +6,32 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Invalid {
+	@JsonProperty(value="InvalidEmailAddresses")
+	private List<EmailAddress> invalidEmailAddresses=null;
 	@JsonProperty(value="InvalidEmailAddress")
-	private List<EmailAddress> invalid=null;//For Listing
+	private EmailAddress invalidEmailAddress=null;
 	
 	public Invalid(){
 		super();
-		invalid =new ArrayList<EmailAddress>();
+		invalidEmailAddress = new EmailAddress();
+		invalidEmailAddresses =  new ArrayList<EmailAddress>();
 	}
 
-	public List<EmailAddress> getInvalid() {
-		return invalid;
+	public List<EmailAddress> getInvalidEmailAddresses() {
+		return invalidEmailAddresses;
+	}
+	public void setInvalidEmailAddresses(List<EmailAddress> invalidEmailAddresses) {
+		this.invalidEmailAddresses = invalidEmailAddresses;
 	}
 
-	public void setInvalid(List<EmailAddress> invalid) {
-		this.invalid = invalid;
+	public EmailAddress getInvalidEmailAddress() {
+		return invalidEmailAddress;
 	}
+	public void setInvalidEmailAddress(EmailAddress invalidEmailAddress) {
+		this.invalidEmailAddress = invalidEmailAddress;
+	}
+
+	
+
+	
 }

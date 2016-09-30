@@ -28,7 +28,7 @@ public class ListTranscription {
 					}
 				}else{
 					System.out.println("List Transcription");
-					for(Transcription curMessage:listTranscription.getMessage360().getTranscription()){
+					for(Transcription curMessage:listTranscription.getMessage360().getTranscriptions().getTranscription()){
 						System.out.println("sid="+curMessage.getTranscriptionSid()+",status:="+curMessage.getStatus());
 					}
 				}

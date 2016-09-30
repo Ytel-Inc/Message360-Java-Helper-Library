@@ -29,7 +29,7 @@ public class CarrierLookupList {
 				}else{
 					System.out.println("CarrierLookupList");
 					for(Carrier curCarrier:carrierLookupList.getMessage360().getCarriers().getCarrier())
-						System.out.println("Carrier Sid:="+curCarrier.getCarrierSid());
+						System.out.println("Carrier Sid:="+curCarrier.getCarrierSid()+","+curCarrier.getAccountSid());
 					}
 					
 				}

@@ -6,19 +6,32 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Blocked {
+	
+	@JsonProperty(value="BlockedEmailAddresses")
+	private List<EmailAddress> blockedEmailAddresses=null;
 	@JsonProperty(value="BlockedEmailAddress")
-	private List<EmailAddress> blocked=null;
+	private EmailAddress blockedEmailAddres=null;
 	
 	public Blocked(){
 		super();
-		blocked =new ArrayList<EmailAddress>();
+		blockedEmailAddresses = new ArrayList<EmailAddress>();
+		blockedEmailAddres =  new EmailAddress();
 	}
 
-	public List<EmailAddress> getBlocked() {
-		return blocked;
+	public List<EmailAddress> getBlockedEmailAddresses() {
+		return blockedEmailAddresses;
 	}
 
-	public void setBlocked(List<EmailAddress> blocked) {
-		this.blocked = blocked;
+	public void setBlockedEmailAddresses(List<EmailAddress> blockedEmailAddresses) {
+		this.blockedEmailAddresses = blockedEmailAddresses;
 	}
+
+	public EmailAddress getBlockedEmailAddres() {
+		return blockedEmailAddres;
+	}
+
+	public void setBlockedEmailAddres(EmailAddress blockedEmailAddres) {
+		this.blockedEmailAddres = blockedEmailAddres;
+	}
+	
 }

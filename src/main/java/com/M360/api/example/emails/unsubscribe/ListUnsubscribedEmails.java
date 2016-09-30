@@ -24,11 +24,12 @@ public class ListUnsubscribedEmails {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
+			Integer offset=null,limit=null;
 			if(!M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.listJsonUnsubsribeEmaillAddress();
+				String jsonEmailResponse=conn.listJsonUnsubsribeEmaillAddress(offset,limit);
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Unsubscribed>> unSubscribedList = conn.listUnsubsribeEmaillAddress();
+				Message360<Message360Email<Unsubscribed>> unSubscribedList = conn.listUnsubsribeEmaillAddress(offset,limit);
 				if(unSubscribedList.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<unSubscribedList.getMessage360().getErrors().getError().size();x++){
 						Error error=unSubscribedList.getMessage360().getErrors().getError().get(x);
@@ -36,7 +37,7 @@ public class ListUnsubscribedEmails {
 					}
 				}else{
 					System.out.println("List Unsubscribe Emails");
-					for(EmailAddress emailAddr:unSubscribedList.getMessage360().getEmail().getUnsubscribed()){
+					for(EmailAddress emailAddr:unSubscribedList.getMessage360().getEmail().getUnsubscribedEmailAddresses()){
 						System.out.println("20:Email:= "+emailAddr.getEmail());
 					}
 				}

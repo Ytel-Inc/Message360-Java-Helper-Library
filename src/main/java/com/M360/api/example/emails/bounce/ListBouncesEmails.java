@@ -24,11 +24,12 @@ public class ListBouncesEmails {
 		conf.setAuthToken(M360Constants.AUTHTOKEN);
 		Message360Connector conn = new Message360Connector(conf);
 		try {
-			if(M360Constants.JSONFORMAT){
-				String jsonEmailResponse=conn.listJsonBounceEmail();
+			Integer offSet=null,limit=null;
+			if(!M360Constants.JSONFORMAT){
+				String jsonEmailResponse=conn.listJsonBounceEmail(offSet, limit);
 				System.out.println(jsonEmailResponse);
 			}else{
-				Message360<Message360Email<Bounce>> bounceList = conn.listBounceEmail();
+				Message360<Message360Email<Bounce>> bounceList = conn.listBounceEmail(offSet, limit);
 				if(bounceList.getMessage360().getErrors().getError().size()!=0){
 					for(int x=0;x<bounceList.getMessage360().getErrors().getError().size();x++){
 						Error error=bounceList.getMessage360().getErrors().getError().get(x);
@@ -36,7 +37,7 @@ public class ListBouncesEmails {
 					}
 				}else{
 					System.out.println("List of Bounces Emails.");
-					for(EmailAddress curBounceEmailAddres:bounceList.getMessage360().getEmail().getBounce()){
+					for(EmailAddress curBounceEmailAddres:bounceList.getMessage360().getEmail().getBouncedEmailAddresses()){
 						System.out.println(curBounceEmailAddres.getEmail()+",\tStatus:="+curBounceEmailAddres.getStatus()+",\tReason:="+curBounceEmailAddres.getReason());
 					}
 				}
@@ -46,3 +47,13 @@ public class ListBouncesEmails {
 		}
 	}
 }
+/*
+ *shoaib@ytel.co.in,	Status:=5.1.1,	Reason:=550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. Learn more at  https://support.google.com/mail/answer/6596 f13si1534988pff.157 - gsmtp 
+see@df.com,	Status:=5.1.1,	Reason:=550 5.1.1 RESOLVER.ADR.RecipNotFound; not found
+sese@df.com,	Status:=5.1.1,	Reason:=550 5.1.1 RESOLVER.ADR.RecipNotFound; not found
+seema+test1@gmail.com,	Status:=5.1.1,	Reason:=550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. Learn more at  https://support.google.com/mail/answer/6596 201si56121663pfu.156 - gsmtp 
+eema+test6@ytel.co.in,	Status:=5.1.1,	Reason:=550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. Learn more at  https://support.google.com/mail/answer/6596 f88si39378028pfj.219 - gsmtp 
+seemass@ytel.co.in,	Status:=5.1.1,	Reason:=550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. Learn more at  https://support.google.com/mail/answer/6596 fp17si895236pac.142 - gsmtp 
+abc@xyz.com,	Status:=5.1.1,	Reason:=550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces. Learn more at  https://support.google.com/mail/answer/6596 k74si56107118pfb.191 - gsmtp 
+ 
+ */

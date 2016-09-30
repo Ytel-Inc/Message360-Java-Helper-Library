@@ -36,12 +36,8 @@ public class DeleteBounceEmail {
 					}
 				}else{
 					System.out.println("Delete Bounce Email");;
-					for(EmailAddress curBounceEmailAddres:deleteBounceEmail.getMessage360().getEmail().getBounce()){
-						if(curBounceEmailAddres.getDeleteStatus().toLowerCase().equals("fail"))
-							System.out.println(curBounceEmailAddres.getEmail()+",\tDeleteStatus :="+curBounceEmailAddres.getDeleteStatus()+",\tReason:="+curBounceEmailAddres.getReason());
-						else
-							System.out.println(curBounceEmailAddres.getEmail()+",\tDeleteStatus :="+curBounceEmailAddres.getDeleteStatus());
-					}
+					EmailAddress curBounceEmailAddres=deleteBounceEmail.getMessage360().getEmail().getBouncedEmailAddress();
+					System.out.println(curBounceEmailAddres.getEmail()+",\tDeleteStatus :="+curBounceEmailAddres.getDeleteStatus()+",\tReason:="+curBounceEmailAddres.getReason());
 				}
 			}
 		} catch (M360Exception e) {
